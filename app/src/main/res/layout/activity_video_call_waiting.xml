@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:focusable="false">
+
+    <com.holo.tvwidget.DrawingOrderRelativeLayout
+        android:id="@+id/rl_video_call_wait_view"
+        android:layout_width="720dp"
+        android:layout_height="420dp"
+        android:layout_centerInParent="true"
+        android:background="@mipmap/background">
+
+        <ImageView
+            android:id="@+id/iv_call_wait_phone"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_margin="36dp"
+            android:src="@mipmap/ic_call_wait_phone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="75dp"
+            android:text="正在呼叫专家"
+            android:textColor="#ffffffff"
+            android:textSize="34sp" />
+
+        <com.realview.holo.call.widget.DiscussionAvatarView
+            android:id="@+id/daview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            app:imageRadius="96"
+            app:isLastComplete="true"
+            app:isShowAnimation="false"
+            app:isShowFrame="false"
+            app:maxCount="6"
+            app:space="0.5" />
+
+        <com.holo.tvwidget.MetroItemFrameLayout
+            android:id="@+id/stop"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="40dp"
+            android:focusable="true"
+            app:radius="4dp">
+
+            <ImageView
+                android:id="@+id/iv_video_call_stop_wait"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@mipmap/ic_video_call_stop" />
+        </com.holo.tvwidget.MetroItemFrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="挂  断"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+
+    </com.holo.tvwidget.DrawingOrderRelativeLayout>
+
+
+</RelativeLayout>
