@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.holoview.aidl.AudioMessage;
 import com.holoview.aidl.ProcessServiceIAidl;
 import com.hv.calllib.CallManager;
+import com.hv.calllib.HoloCall;
 import com.hv.calllib.HoloCallMsgHandler;
 import com.hv.imlib.HoloMessage;
 import com.hv.imlib.model.Message;
@@ -175,15 +176,16 @@ public class CallBackgroundService extends Service {
             if (audio == null) {
                 return;
             }
-//            WebRtcAudioRecord record = WebRtcAudioRecord.getInstance();
-//            if (record == null) {
-//                HoloMessage message = new HoloMessage();
-//                message.setAction("api.audio.unsubscribe");
-//                EventBus.getDefault().post(message);
-//                return;
-//            }
-//
-//            record.onAudioData(audio.getAudioData());
+            WebRtcAudioRecord record = WebRtcAudioRecord.getInstance();
+            if (record == null) {
+                HoloMessage message = new HoloMessage();
+                message.setAction("api.audio.unsubscribe");
+                EventBus.getDefault().post(message);
+                return;
+            }
+            if (HoloCall.needAudio){
+                record.onAudioData(audio.getAudioData());
+            }
         }
 
     };

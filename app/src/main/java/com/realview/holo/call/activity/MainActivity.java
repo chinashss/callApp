@@ -325,7 +325,7 @@ public class MainActivity extends BaseActivity implements CallListener {
             public void run() {
                 ConversationType type = ConversationType.setValue(converstaionType);
                 CallManager.getInstance().setUserSelfId(userSelfid);
-
+                HoloCall.needAudio = true;
                 HoloCall.getInstance().startCall(type, ConversationType.P2P == type ? longs.get(0) : roomId, longs, CallMediaType.VIDEO,
                         CallEngineType.ENGINE_TYPE_NORMAL, null,
                         103, userSelfid);

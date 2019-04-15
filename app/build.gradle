@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    implementation 'holo.com:call-lib:1.0.3'
+    implementation 'holo.com:call-lib:1.0.5'
     implementation 'com.android.support:multidex:1.0.0'
     implementation 'holo.com:tv-widget-lib:1.0.0'
 //    api project(':CallLib')
