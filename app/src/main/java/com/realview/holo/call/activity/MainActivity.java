@@ -35,7 +35,6 @@ import com.hv.calllib.CallManager;
 import com.hv.calllib.CallSession;
 import com.hv.calllib.HoloCall;
 import com.hv.calllib.bean.HoloEvent;
-import com.hv.imlib.DB.sp.SystemConfigSp;
 import com.hv.imlib.HoloMessage;
 import com.hv.imlib.imservice.event.CaptureImageEvent;
 import com.hv.imlib.model.ConversationType;
@@ -125,6 +124,7 @@ public class MainActivity extends BaseActivity implements CallListener {
             finishActvity();
             return;
         }
+        Log.i("BUGG", action);
 
 
         List<Long> longs = JSON.parseArray(action, Long.class);
@@ -219,7 +219,7 @@ public class MainActivity extends BaseActivity implements CallListener {
         EventBus.getDefault().unregister(this);
         unbindService(conn);
         stopRing();
-
+        action = null;
         Log.d(TAG, "finishActvity");
         if (mServiceIntent != null) {
             stopService(mServiceIntent);

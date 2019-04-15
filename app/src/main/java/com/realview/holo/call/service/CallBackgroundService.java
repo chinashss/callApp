@@ -125,8 +125,7 @@ public class CallBackgroundService extends Service {
 
                     HoloMessage holoMsg = new HoloMessage();
                     holoMsg.setAction("api.audio.unsubscribe");
-                    EventBus.getDefault().post(holoMsg);
-
+                    EventBus.getDefault().postSticky(holoMsg);
 
                 } else if (action.contains("CallInviteMessage")) {
                     CallInviteMessage callInviteMessage = JSON.parseObject(content.toString(), CallInviteMessage.class);
@@ -176,15 +175,15 @@ public class CallBackgroundService extends Service {
             if (audio == null) {
                 return;
             }
-            WebRtcAudioRecord record = WebRtcAudioRecord.getInstance();
-            if (record == null) {
-                HoloMessage message = new HoloMessage();
-                message.setAction("api.audio.unsubscribe");
-                EventBus.getDefault().post(message);
-                return;
-            }
-
-            record.onAudioData(audio.getAudioData());
+//            WebRtcAudioRecord record = WebRtcAudioRecord.getInstance();
+//            if (record == null) {
+//                HoloMessage message = new HoloMessage();
+//                message.setAction("api.audio.unsubscribe");
+//                EventBus.getDefault().post(message);
+//                return;
+//            }
+//
+//            record.onAudioData(audio.getAudioData());
         }
 
     };

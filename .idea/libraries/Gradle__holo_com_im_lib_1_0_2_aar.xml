@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: holo.com:im-lib:1.0.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/im-lib-1.0.2.aar/9705dcfd884e8cb1d1518b8452546535/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/im-lib-1.0.2.aar/9705dcfd884e8cb1d1518b8452546535/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/im-lib-1.0.2.aar/5d558a5acb1cff5c296485a24a571c91/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/im-lib-1.0.2.aar/5d558a5acb1cff5c296485a24a571c91/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

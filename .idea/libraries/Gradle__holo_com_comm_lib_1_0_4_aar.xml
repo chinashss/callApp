@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: holo.com:comm-lib:1.0.4@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/comm-lib-1.0.4.aar/3c034315c0da35347ec16c140e3f026c/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/comm-lib-1.0.4.aar/3c034315c0da35347ec16c140e3f026c/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/comm-lib-1.0.4.aar/abfe053e30c4061f0737a879607f555c/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/comm-lib-1.0.4.aar/abfe053e30c4061f0737a879607f555c/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

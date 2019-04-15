@@ -19,7 +19,6 @@
         android:src="@mipmap/ic_extra_camera_focus" />
 
 
-
     <FrameLayout
         android:layout_width="700dp"
         android:layout_height="500dp"

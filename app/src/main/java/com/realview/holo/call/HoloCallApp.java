@@ -28,6 +28,8 @@ public class HoloCallApp extends MultiDexApplication {
         super.onCreate();
         Bugly.init(getApplicationContext(), "3f45ddcfa3", false);
         Bugly.setAppChannel(getApplicationContext(), "HoloCall");
+        CrashReport.initCrashReport(getApplicationContext());
+
         Beta.autoInit = true;
         Beta.autoCheckUpgrade = true;
         UserManager.init(this);
