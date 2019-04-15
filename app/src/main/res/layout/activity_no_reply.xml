@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="75dp"
-            android:text="无人应答,请稍后再拨"
+            android:text="对方已挂机"
             android:textColor="#ffffffff"
             android:textSize="34sp" />
 

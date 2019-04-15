@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: holo.com:call-lib:1.0.1@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/call-lib-1.0.1.aar/4a866f18ae4eb8a3821d7ffbb9995a07/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/call-lib-1.0.1.aar/4a866f18ae4eb8a3821d7ffbb9995a07/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/call-lib-1.0.1.aar/cc5e0be300de92674e31723d04aceeae/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/call-lib-1.0.1.aar/cc5e0be300de92674e31723d04aceeae/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

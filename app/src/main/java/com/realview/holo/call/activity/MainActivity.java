@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.google.gson.Gson;
 import com.holo.tvwidget.DrawingOrderRelativeLayout;
 import com.holo.tvwidget.MetroItemFrameLayout;
 import com.holo.tvwidget.MetroViewBorderHandler;
@@ -34,11 +35,14 @@ import com.hv.calllib.CallManager;
 import com.hv.calllib.CallSession;
 import com.hv.calllib.HoloCall;
 import com.hv.calllib.bean.HoloEvent;
+import com.hv.imlib.DB.sp.SystemConfigSp;
 import com.hv.imlib.HoloMessage;
 import com.hv.imlib.imservice.event.CaptureImageEvent;
 import com.hv.imlib.model.ConversationType;
 import com.hv.imlib.model.Message;
 import com.hv.imlib.model.message.ImageMessage;
+import com.hv.imlib.protocol.http.NaviRes;
+import com.realview.commonlibrary.server.manager.CommLib;
 import com.realview.commonlibrary.server.manager.UserManager;
 import com.realview.commonlibrary.server.response.UserInfoGetRes;
 import com.realview.holo.call.ImageUtil;
@@ -102,6 +106,10 @@ public class MainActivity extends BaseActivity implements CallListener {
         userSelfid = intentFromApp.getLongExtra("userSelfId", 0L);
         converstaionType = intentFromApp.getIntExtra("converstaionType", 0);
         roomId = intentFromApp.getLongExtra("roomId", 0L);
+        String navi = intentFromApp.getStringExtra("navi");
+        NaviRes naviRes = new Gson().fromJson(navi, NaviRes.class);
+        CommLib.instance().setNaviRes(naviRes);
+
         HoloCall.routeUrl = intentFromApp.getStringExtra("wss");
 
         bindOrderService();
@@ -134,10 +142,14 @@ public class MainActivity extends BaseActivity implements CallListener {
 //        converstaionType = intent.getIntExtra("converstaionType", 0);
 //        roomId = intent.getLongExtra("roomId", 0L);
 //        HoloCall.routeUrl = intent.getStringExtra("wss");
-//
+//        String navi = intent.getStringExtra("navi");
+//        NaviRes naviRes = new Gson().fromJson(navi, NaviRes.class);
+//        CommLib.instance().setNaviRes(naviRes);
 //        List<Long> longs = JSON.parseArray(action, Long.class);
 //        onCall(longs, userSelfid);
 //        showAvatar(longs);
+//
+//
 //    }
 
     private void initTVStatusView() {
@@ -386,7 +398,7 @@ public class MainActivity extends BaseActivity implements CallListener {
     public void onCallDisconnected(CallSession callSession, CallDisconnectedReason callDisconnectedReason) {
         Toast.makeText(MainActivity.this, "视频连接已断开", Toast.LENGTH_SHORT).show();
         ActivityCollector.closeActivity(SuccessActivity.class);
-        if (startWaitTo){
+        if (startWaitTo) {
             Intent intent = new Intent(this, CallNoReplyActivity.class);
             intent.putExtra(Constants.CALL_LIST, action);
             intent.putExtra("userSelfId", userSelfid);

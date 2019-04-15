@@ -8,7 +8,9 @@ import android.graphics.Bitmap;
 import android.hardware.usb.UsbDevice;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -35,6 +37,7 @@ import com.realview.holo.call.FastYUVtoRGB;
 import com.realview.holo.call.HoloCallApp;
 import com.realview.holo.call.ImageUtil;
 import com.realview.holo.call.R;
+import com.realview.holo.call.basic.ActivityCollector;
 import com.realview.holo.call.basic.BaseActivity;
 import com.realview.holo.call.bean.AudioOrderMessage;
 import com.realview.holo.call.bean.Constants;
@@ -63,10 +66,7 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
 
     @BindView(R.id.camera_view)
     UVCCameraTextureView mTextureView;
-    //    @BindView(R.id.switch_camera_button)
-//    MicImageButton switchCameraButton;
-    @BindView(R.id.bottom_view)
-    LinearLayout bottomView;
+
     @BindView(R.id.mif_switch_camera)
     MetroItemFrameLayout mifSwitchCamera;
     @BindView(R.id.mif_take_photo)
@@ -75,12 +75,6 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
     ImageView ivUsbCameraShow;
     @BindView(R.id.fl_lines)
     ImageView flLines;
-    @BindView(R.id.mif_post_photo_sure)
-    MetroItemFrameLayout mifPostPhotoSure;
-    @BindView(R.id.mif_post_photo_reject)
-    MetroItemFrameLayout mifPostPhotoReject;
-    @BindView(R.id.send_image_check)
-    TextView sendImageCheck;
     @BindView(R.id.dor_extra_content)
     DrawingOrderRelativeLayout dorExtraContent;
 
@@ -167,18 +161,21 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAudioOrderMessage(AudioOrderMessage message) {
-        if (message.getType() == 100) {
+        if (message.getType() == 118) {
             //确认
-            if (inSendingProgress == false) {
+            if (mCameraHelper.isCameraOpened()) {
                 TakePhoto();
-            } else {
-                showShortMsg("文件正在发送中...");
             }
-
-        } else if (message.getType() == 101 || message.getType() == 105) {
+        } else if (message.getType() == 101 || message.getType() == 119) {
             //取消
             isFinishing = true;
-            finish();
+            if (ActivityCollector.isActivityTop(UVCCameraActivity.class, this)) {
+                finish();
+            }
+        }else if (message.getType()==121){
+            if (ActivityCollector.isActivityTop(UVCCameraActivity.class, this)) {
+                finish();
+            }
         }
     }
 
@@ -218,6 +215,7 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
         });
         RequestPermission();
     }
+
 
     private void initTVStatusView() {
         FrameLayout roundedFrameLayout = new FrameLayout(this);
@@ -435,22 +433,26 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        bottomView.setVisibility(View.VISIBLE);
                         ivUsbCameraShow.setVisibility(View.VISIBLE);
-                        mifPostPhotoReject.setVisibility(View.VISIBLE);
-                        mifPostPhotoSure.setVisibility(View.VISIBLE);
-                        sendImageCheck.setVisibility(View.VISIBLE);
-
-
                         FastYUVtoRGB fastYUVtoRGB = new FastYUVtoRGB(UVCCameraActivity.this);
                         bitmap = fastYUVtoRGB.convertYUVtoRGB(data, UVCCameraHelper.getInstance().getPreviewWidth(), UVCCameraHelper.getInstance().getPreviewHeight());
                         ivUsbCameraShow.setImageBitmap(bitmap);
+                        imageHandler.sendEmptyMessageDelayed(0, 4000);
+                        PostSendPICMessage();
                     }
                 });
             }
         });
 
     }
+
+    Handler imageHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            ivUsbCameraShow.setVisibility(View.GONE);
+        }
+    };
 
     Bitmap bitmap;
 
@@ -509,26 +511,11 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
         }
     }
 
-    @OnClick({R.id.mif_take_photo, R.id.mif_post_photo_sure, R.id.mif_post_photo_reject})
+    @OnClick({R.id.mif_take_photo})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.mif_take_photo:
                 TakePhoto();
-                break;
-            case R.id.mif_post_photo_sure:
-                PostSendPICMessage();
-                bottomView.setVisibility(View.GONE);
-                ivUsbCameraShow.setVisibility(View.GONE);
-                mifPostPhotoReject.setVisibility(View.GONE);
-                mifPostPhotoSure.setVisibility(View.GONE);
-                sendImageCheck.setVisibility(View.GONE);
-                break;
-            case R.id.mif_post_photo_reject:
-                bottomView.setVisibility(View.GONE);
-                ivUsbCameraShow.setVisibility(View.GONE);
-                mifPostPhotoReject.setVisibility(View.GONE);
-                mifPostPhotoSure.setVisibility(View.GONE);
-                sendImageCheck.setVisibility(View.GONE);
                 break;
         }
     }

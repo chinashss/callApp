@@ -27,6 +27,7 @@ import com.realview.commonlibrary.server.manager.UserManager;
 import com.realview.commonlibrary.server.response.UserInfoGetRes;
 import com.realview.holo.call.HoloCallApp;
 import com.realview.holo.call.R;
+import com.realview.holo.call.basic.ActivityCollector;
 import com.realview.holo.call.basic.BaseActivity;
 import com.realview.holo.call.bean.AudioOrderMessage;
 import com.realview.holo.call.bean.CloseMessage;
@@ -141,6 +142,10 @@ public class SuccessActivity extends BaseActivity {
         if (message.getType() == 115) {
             //挂断
             closeApp();
+        }else if (message.getType()==121){
+            if (ActivityCollector.isActivityTop(UVCCameraActivity.class, this)) {
+                onSwitchCamera();
+            }
         }
     }
 

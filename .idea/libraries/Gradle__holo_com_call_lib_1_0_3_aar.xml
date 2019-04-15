@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: holo.com:call-lib:1.0.3@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/call-lib-1.0.3.aar/a083cc573c699b96e481293848d5e365/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/call-lib-1.0.3.aar/a083cc573c699b96e481293848d5e365/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
