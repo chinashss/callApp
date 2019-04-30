@@ -4,7 +4,7 @@ buildscript {
 
     repositories {
         maven {
-            url 'http://192.168.11.252:8012/repository/maven-releases/'
+            url 'http://188.131.234.214:8081/repository/maven-releases/'
             //这个路径就是Browse下maven-release右边有一个copy按钮，复制出来的。
         }
 
@@ -24,7 +24,7 @@ buildscript {
 allprojects {
     repositories {
         maven {
-            url 'http://192.168.11.252:8012/repository/maven-releases/'
+            url 'http://188.131.234.214:8081/repository/maven-releases/'
             //这个路径就是Browse下maven-release右边有一个copy按钮，复制出来的。
         }
         maven { url 'http://raw.github.com/saki4510t/libcommon/master/repository/' }
