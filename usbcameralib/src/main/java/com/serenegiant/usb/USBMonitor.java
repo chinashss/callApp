@@ -421,7 +421,6 @@ public final class USBMonitor {
 		boolean result = false;
 		if (isRegistered()) {
 			if (device != null) {
-
 				if (mUsbManager.hasPermission(device)) {
 					// ic_call_logo onConnect if app already has permission
 					processConnect(device);

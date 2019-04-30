@@ -1,0 +1,8 @@
+symbolFile=D:\AndroidProject\android-glass-callApp\app\bugly\buglySymbol_libOpenCV_armeabi-v5te-68cb2.zip
+file=D:\AndroidProject\android-glass-callApp\CallLib\src\main\obj\local\armeabi\libOpenCV.so
+uuid=68cb2d02916c9e1ad85ab149130975df
+
+symbolFile=D:\AndroidProject\android-glass-callApp\app\bugly\buglySymbol_libOpenCV_armeabi-v7a-3bc19.zip
+file=D:\AndroidProject\android-glass-callApp\CallLib\src\main\obj\local\armeabi-v7a\libOpenCV.so
+uuid=3bc195fad4a4e5a3db3cea4b48328881
+

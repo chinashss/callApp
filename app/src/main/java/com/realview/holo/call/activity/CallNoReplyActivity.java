@@ -18,15 +18,13 @@ import com.holo.tvwidget.MetroItemFrameLayout;
 import com.holo.tvwidget.MetroViewBorderHandler;
 import com.holo.tvwidget.MetroViewBorderImpl;
 import com.hv.imlib.model.ConversationType;
+import com.realview.commonlibrary.server.manager.CommLib;
 import com.realview.commonlibrary.server.manager.UserManager;
 import com.realview.commonlibrary.server.response.UserInfoGetRes;
 import com.realview.holo.call.R;
 import com.realview.holo.call.basic.BaseActivity;
-import com.realview.holo.call.bean.AudioOrderMessage;
 import com.realview.holo.call.bean.Constants;
 import com.realview.holo.call.widget.DiscussionAvatarView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -78,26 +76,26 @@ public class CallNoReplyActivity extends BaseActivity {
         for (int i = 0; i < longs.size(); i++) {
             if (longs.get(i) <= 0) continue;
             ConversationType type = ConversationType.setValue(converstaionType);
-            UserManager.instance().getUserInfo(ConversationType.P2P == type ? longs.get(i) : roomId, new UserManager.ResultCallback<UserInfoGetRes.ResultBean>() {
-                @Override
-                public void onSuccess(final UserInfoGetRes.ResultBean resultBean) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
+            if (CommLib.instance().getNaviRes() != null)
+                UserManager.instance().getUserInfo(ConversationType.P2P == type ? longs.get(i) : roomId, new UserManager.ResultCallback<UserInfoGetRes.ResultBean>() {
+                    @Override
+                    public void onSuccess(final UserInfoGetRes.ResultBean resultBean) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
                                 replyDaview.addData(resultBean.getPortrait(), (TextUtils.isEmpty(resultBean.getNickname()) ? resultBean.getUsername() : resultBean.getNickname()));
 
-                        }
-                    });
+                            }
+                        });
 
 
-                }
+                    }
 
-                @Override
-                public void onError(String errString) {
-                    Log.d("lipengfei", "errString: " + errString);
-                }
-            });
+                    @Override
+                    public void onError(String errString) {
+                        Log.d("lipengfei", "errString: " + errString);
+                    }
+                });
         }
     }
 

@@ -1,20 +1,16 @@
 package com.realview.holo.call;
 
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
-import android.os.Handler;
+import android.hardware.usb.UsbDevice;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import com.realview.commonlibrary.audiorecord.XAudioRecordMgr;
+import com.holoview.usbcameralib.UVCCameraHelper;
 import com.realview.commonlibrary.server.manager.UserManager;
+import com.serenegiant.usb.USBMonitor;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
-import com.tencent.bugly.crashreport.CrashReport;
 
 
 /**
@@ -28,13 +24,13 @@ public class HoloCallApp extends MultiDexApplication {
         super.onCreate();
         Bugly.init(getApplicationContext(), "3f45ddcfa3", false);
         Bugly.setAppChannel(getApplicationContext(), "HoloCall");
-        CrashReport.initCrashReport(getApplicationContext());
 
         Beta.autoInit = true;
         Beta.autoCheckUpgrade = true;
         UserManager.init(this);
 
     }
+
 
     @Override
     public void onTerminate() {

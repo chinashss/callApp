@@ -99,7 +99,7 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
 
         @Override
         public void onAttachDev(UsbDevice device) {
-            if (mCameraHelper == null || mCameraHelper.getUsbDeviceCount() == 0) {
+            if (mCameraHelper == null || mCameraHelper.getUsbDeviceCount(UVCCameraActivity.this) == 0) {
                 showShortMsg("check no usb camera");
                 return;
             }
@@ -107,7 +107,7 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
             if (!isRequest) {
                 isRequest = true;
                 if (mCameraHelper != null) {
-                    mCameraHelper.requestPermission(0);
+                    mCameraHelper.requestPermission(0,UVCCameraActivity.this);
                 }
             }
         }

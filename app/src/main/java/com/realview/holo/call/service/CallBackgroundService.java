@@ -183,9 +183,7 @@ public class CallBackgroundService extends Service {
                 EventBus.getDefault().post(message);
                 return;
             }
-            if (HoloCall.needAudio){
-                record.onAudioData(audio.getAudioData());
-            }
+            record.onAudioData(audio.getAudioData());
         }
 
     };

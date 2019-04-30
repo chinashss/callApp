@@ -49,7 +49,7 @@ import com.realview.holo.call.R;
 import com.realview.holo.call.basic.ActivityCollector;
 import com.realview.holo.call.basic.BaseActivity;
 import com.realview.holo.call.bean.AudioOrderMessage;
-import com.realview.holo.call.bean.CloseMessage;
+import com.hv.calllib.bean.CloseMessage;
 import com.realview.holo.call.bean.Constants;
 import com.realview.holo.call.service.CallBackgroundService;
 import com.realview.holo.call.widget.DiscussionAvatarView;
@@ -111,6 +111,8 @@ public class MainActivity extends BaseActivity implements CallListener {
 
         HoloCall.routeUrl = intentFromApp.getStringExtra("wss");
 
+
+
         bindOrderService();
         mServiceIntent = new Intent(this, CallBackgroundService.class);
         startService(mServiceIntent);
@@ -119,14 +121,12 @@ public class MainActivity extends BaseActivity implements CallListener {
         holoCall.setVoIPCallListener(this);
         holoCall.setEnableAllRemoteVideo(false);
 
-        if (TextUtils.isEmpty(action)) {
+        if (CommLib.instance().getNaviRes() == null) {
             Toast.makeText(this, "请从Launcher中启动", Toast.LENGTH_SHORT).show();
-            finishActvity();
+            finish();
             return;
         }
-        Log.i("BUGG", action);
-
-
+        intentFromApp.getExtras().clear();
         List<Long> longs = JSON.parseArray(action, Long.class);
         onCall(longs, userSelfid);
         showAvatar(longs);
@@ -134,23 +134,23 @@ public class MainActivity extends BaseActivity implements CallListener {
 
     }
 
-//    @Override
-//    protected void onNewIntent(Intent intent) {
-//        super.onNewIntent(intent);
-//        action = intent.getStringExtra(Constants.CALL_LIST);
-//        userSelfid = intent.getLongExtra("userSelfId", 0L);
-//        converstaionType = intent.getIntExtra("converstaionType", 0);
-//        roomId = intent.getLongExtra("roomId", 0L);
-//        HoloCall.routeUrl = intent.getStringExtra("wss");
-//        String navi = intent.getStringExtra("navi");
-//        NaviRes naviRes = new Gson().fromJson(navi, NaviRes.class);
-//        CommLib.instance().setNaviRes(naviRes);
-//        List<Long> longs = JSON.parseArray(action, Long.class);
-//        onCall(longs, userSelfid);
-//        showAvatar(longs);
-//
-//
-//    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        action = intent.getStringExtra(Constants.CALL_LIST);
+        userSelfid = intent.getLongExtra("userSelfId", 0L);
+        converstaionType = intent.getIntExtra("converstaionType", 0);
+        roomId = intent.getLongExtra("roomId", 0L);
+        HoloCall.routeUrl = intent.getStringExtra("wss");
+        String navi = intent.getStringExtra("navi");
+        NaviRes naviRes = new Gson().fromJson(navi, NaviRes.class);
+        CommLib.instance().setNaviRes(naviRes);
+        List<Long> longs = JSON.parseArray(action, Long.class);
+        onCall(longs, userSelfid);
+        showAvatar(longs);
+
+
+    }
 
     private void initTVStatusView() {
         FrameLayout roundedFrameLayout = new FrameLayout(this);
@@ -398,14 +398,14 @@ public class MainActivity extends BaseActivity implements CallListener {
     public void onCallDisconnected(CallSession callSession, CallDisconnectedReason callDisconnectedReason) {
         Toast.makeText(MainActivity.this, "视频连接已断开", Toast.LENGTH_SHORT).show();
         ActivityCollector.closeActivity(SuccessActivity.class);
-        if (startWaitTo) {
-            Intent intent = new Intent(this, CallNoReplyActivity.class);
-            intent.putExtra(Constants.CALL_LIST, action);
-            intent.putExtra("userSelfId", userSelfid);
-            intent.putExtra("converstaionType", converstaionType);
-            intent.putExtra("roomId", roomId);
-            startActivityForResult(intent, Constants.CALL_DIS_CONN);
-        }
+//        if (startWaitTo) {
+//            Intent intent = new Intent(this, CallNoReplyActivity.class);
+//            intent.putExtra(Constants.CALL_LIST, action);
+//            intent.putExtra("userSelfId", userSelfid);
+//            intent.putExtra("converstaionType", converstaionType);
+//            intent.putExtra("roomId", roomId);
+//            startActivityForResult(intent, Constants.CALL_DIS_CONN);
+//        }
     }
 
     @Override

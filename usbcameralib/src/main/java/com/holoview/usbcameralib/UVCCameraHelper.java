@@ -1,11 +1,11 @@
 package com.holoview.usbcameralib;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.hardware.usb.UsbDevice;
 import android.os.Environment;
 
-import com.holoview.usbcameralib.R;
 import com.serenegiant.usb.DeviceFilter;
 import com.serenegiant.usb.Size;
 import com.serenegiant.usb.USBMonitor;
@@ -16,7 +16,6 @@ import com.serenegiant.usb.encoder.RecordParams;
 import com.serenegiant.usb.widget.CameraViewInterface;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 /** UVCCamera Helper class
@@ -137,7 +136,7 @@ public class UVCCameraHelper {
             }
         });
 
-        createUVCCamera();
+//        createUVCCamera();
     }
 
     public void createUVCCamera() {
@@ -212,30 +211,31 @@ public class UVCCameraHelper {
         return mCameraHandler != null ? mCameraHandler.resetValue(flag) : 0;
     }
 
-    public void requestPermission(int index) {
-        List<UsbDevice> devList = getUsbDeviceList();
+    public boolean requestPermission(int index,Context mContext) {
+        List<UsbDevice> devList = getUsbDeviceList(mContext);
         if (devList == null || devList.size() == 0) {
-            return;
+            return false;
         }
         int count = devList.size();
         if (index >= count)
             new IllegalArgumentException("index illegal,should be < devList.size()");
         if (mUSBMonitor != null) {
-            mUSBMonitor.requestPermission(getUsbDeviceList().get(index));
+            return mUSBMonitor.requestPermission(getUsbDeviceList(mContext).get(index));
         }
+        return false;
     }
 
-    public int getUsbDeviceCount() {
-        List<UsbDevice> devList = getUsbDeviceList();
+    public int getUsbDeviceCount(Context mContext) {
+        List<UsbDevice> devList = getUsbDeviceList(mContext);
         if (devList == null || devList.size() == 0) {
             return 0;
         }
         return devList.size();
     }
 
-    public List<UsbDevice> getUsbDeviceList() {
+    public List<UsbDevice> getUsbDeviceList(Context mContext) {
         List<DeviceFilter> deviceFilters = DeviceFilter
-                .getDeviceFilters(mActivity.getApplicationContext(), R.xml.device_filter);
+                .getDeviceFilters(mContext, R.xml.device_filter);
         if (mUSBMonitor == null || deviceFilters == null)
             return null;
         return mUSBMonitor.getDeviceList(deviceFilters.get(0));

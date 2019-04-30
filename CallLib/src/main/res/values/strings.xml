@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">webrtc</string>
+    <string name="camera2_texture_only_error">视频采集不支持新接口</string>
+</resources>
