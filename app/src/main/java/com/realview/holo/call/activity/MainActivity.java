@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.blankj.utilcode.util.AppUtils;
 import com.google.gson.Gson;
 import com.holo.tvwidget.DrawingOrderRelativeLayout;
 import com.holo.tvwidget.MetroItemFrameLayout;
@@ -53,6 +54,9 @@ import com.hv.calllib.bean.CloseMessage;
 import com.realview.holo.call.bean.Constants;
 import com.realview.holo.call.service.CallBackgroundService;
 import com.realview.holo.call.widget.DiscussionAvatarView;
+import com.tencent.bugly.beta.Beta;
+import com.tencent.bugly.beta.UpgradeInfo;
+import com.tencent.bugly.beta.upgrade.UpgradeListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -112,7 +116,6 @@ public class MainActivity extends BaseActivity implements CallListener {
         HoloCall.routeUrl = intentFromApp.getStringExtra("wss");
 
 
-
         bindOrderService();
         mServiceIntent = new Intent(this, CallBackgroundService.class);
         startService(mServiceIntent);
@@ -148,8 +151,6 @@ public class MainActivity extends BaseActivity implements CallListener {
         List<Long> longs = JSON.parseArray(action, Long.class);
         onCall(longs, userSelfid);
         showAvatar(longs);
-
-
     }
 
     private void initTVStatusView() {
@@ -320,6 +321,13 @@ public class MainActivity extends BaseActivity implements CallListener {
     }
 
     public void onCall(final List<Long> longs, final long userSelfid) {
+        UpgradeInfo upgradeInfo = Beta.getUpgradeInfo();
+        if (upgradeInfo != null) {
+            if (AppUtils.getAppVersionCode() < upgradeInfo.versionCode) {
+                Beta.checkUpgrade();
+                return;
+            }
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {

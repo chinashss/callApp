@@ -135,19 +135,19 @@ public class UsbCameraEnumerator implements CameraEnumerator {
     }
 
     static List<Size> convertSizes(List<Camera.Size> cameraSizes) {
-        List<Size> sizes = new ArrayList();
-        Iterator var2 = cameraSizes.iterator();
-
-        while (var2.hasNext()) {
-            Camera.Size size = (Camera.Size) var2.next();
-            sizes.add(new org.webrtc.Size(size.width, size.height));
+        List<Size> sizes = new ArrayList<>();
+        if (cameraSizes != null && !cameraSizes.isEmpty()) {
+            Iterator var2 = cameraSizes.iterator();
+            while (var2.hasNext()) {
+                Camera.Size size = (Camera.Size) var2.next();
+                sizes.add(new org.webrtc.Size(size.width, size.height));
+            }
         }
-
         return sizes;
     }
 
     static List<CameraEnumerationAndroid.CaptureFormat.FramerateRange> convertFramerates(List<int[]> arrayRanges) {
-        List<CameraEnumerationAndroid.CaptureFormat.FramerateRange> ranges = new ArrayList();
+        List<CameraEnumerationAndroid.CaptureFormat.FramerateRange> ranges = new ArrayList<>();
         Iterator var2 = arrayRanges.iterator();
 
         while (var2.hasNext()) {

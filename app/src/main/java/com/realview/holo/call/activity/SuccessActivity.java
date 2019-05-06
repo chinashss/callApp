@@ -137,8 +137,8 @@ public class SuccessActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        closeApp();
+//        super.onBackPressed();
+//        closeApp();
     }
 
     /**
@@ -302,18 +302,19 @@ public class SuccessActivity extends BaseActivity {
 //        usbcameraIntent.putExtra("usbcamera", 0);
 //        usbcameraIntent.putExtra("launchid", "holoviewcall");
 //        startActivity(usbcameraIntent);
+        HoloCall.getInstance().switchCamera();
 
-
-        if (getUSBCamera()) {
-            boolean ispermiss = UVCCameraHelper.getInstance().requestPermission(0,this);
-            if (!ispermiss){
-                Toast.makeText(this, "请检查权限", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            HoloCall.getInstance().switchCamera();
-        } else {
-            Toast.makeText(this, "请检查是否插入摄像头", Toast.LENGTH_SHORT).show();
-        }
+//        if (getUSBCamera()) {
+//            boolean ispermiss = UVCCameraHelper.getInstance().requestPermission(0,this);
+//            if (!ispermiss){
+//                UVCCameraHelper.getInstance().release();
+//                Toast.makeText(this, "请检查权限", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//        } else {
+//            Toast.makeText(this, "请检查是否插入摄像头", Toast.LENGTH_SHORT).show();
+//        }
 
     }
 
@@ -331,4 +332,5 @@ public class SuccessActivity extends BaseActivity {
 
         return true;
     }
+
 }

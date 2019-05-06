@@ -22,11 +22,12 @@ public class HoloCallApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Bugly.init(getApplicationContext(), "3f45ddcfa3", false);
-        Bugly.setAppChannel(getApplicationContext(), "HoloCall");
-
+        Beta.upgradeDialogLayoutId = R.layout.activity_bugly_upgrade;
+        Beta.tipsDialogLayoutId = R.layout.activity_bugly_upgrade;
         Beta.autoInit = true;
         Beta.autoCheckUpgrade = true;
+        Bugly.init(getApplicationContext(), "3f45ddcfa3", false);
+        Bugly.setAppChannel(getApplicationContext(), "HoloCall");
         UserManager.init(this);
 
     }

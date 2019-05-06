@@ -557,7 +557,7 @@ class UsbCameraCapturer implements CameraVideoCapturer {
         if (UsbCameraEnumerator.cameraName.equals(var6)) {
             UvcCameraSession.create(var1, var2, var3, var4, var5, var7, var8, var9);
         } else {
-            Camera1CopySession.create(var1, var2, false, var3, var4, var5, UsbCameraEnumerator.getCameraIndex(var6), var7, var8, var9);
+            Camera1CopySession.create(var1, var2, true, var3, var4, var5, UsbCameraEnumerator.getCameraIndex(var6), var7, var8, var9);
         }
     }
 

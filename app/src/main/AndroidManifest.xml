@@ -74,6 +74,9 @@
             android:name=".activity.UVCCameraActivity"/>
         <activity android:name=".activity.CallNoReplyActivity"/>
 
+
+
+
         <service
             android:name=".service.CallBackgroundService"
             android:enabled="true"
@@ -85,6 +88,9 @@
             </intent-filter>
 
         </service>
+
+
+
     </application>
 
 </manifest>
