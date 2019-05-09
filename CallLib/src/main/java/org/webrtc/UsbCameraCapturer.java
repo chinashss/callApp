@@ -199,6 +199,7 @@ class UsbCameraCapturer implements CameraVideoCapturer {
             synchronized (UsbCameraCapturer.this.stateLock) {
                 if (session != UsbCameraCapturer.this.currentSession) {
                     Logging.w("UsbCameraCapturer", "onTextureFrameCaptured from another session.");
+                    surfaceHelper.returnTextureFrame();
                 } else {
                     if (!UsbCameraCapturer.this.firstFrameObserved) {
                         UsbCameraCapturer.this.eventsHandler.onFirstFrameAvailable();
