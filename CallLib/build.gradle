@@ -9,11 +9,11 @@ uploadArchives {
                 authentication(userName: 'admin', password: 'admin123')
             }
             pom.project {
-                version '1.0.3'
+                version '1.0.5'
                 artifactId 'call-lib'
                 groupId 'holo.com'
                 packaging 'aar'
-                description '添加usb'
+                description '稳定版'
             }
         }
     }
@@ -91,9 +91,9 @@ dependencies {
     implementation 'holo.com:opencv:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'org.greenrobot:eventbus:3.1.1'
-    api 'holo.com:im-lib:1.0.1'
-    api 'holo.com:comm-lib:1.0.2'
-    api project(path: ':usbcameralib')
+//    api 'holo.com:im-lib:1.0.2'
+    api 'holo.com:comm-lib:1.0.3'
+//    api project(path: ':usbcameralib')
 //    api 'holo.com:usbcamera-lib:1.0.1'
 }
 repositories {

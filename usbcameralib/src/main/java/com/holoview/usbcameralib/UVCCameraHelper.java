@@ -136,7 +136,7 @@ public class UVCCameraHelper {
             }
         });
 
-//        createUVCCamera();
+        createUVCCamera();
     }
 
     public void createUVCCamera() {

@@ -4,11 +4,8 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -17,15 +14,14 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
 import com.holoview.aidl.AudioMessage;
 import com.holoview.aidl.ProcessServiceIAidl;
 import com.hv.calllib.CallManager;
-import com.hv.calllib.HoloCall;
 import com.hv.calllib.HoloCallMsgHandler;
 import com.hv.imlib.HoloMessage;
 import com.hv.imlib.model.Message;
 import com.hv.imlib.model.message.ImageMessage;
+import com.hv.imlib.model.message.TextMessage;
 import com.realview.holo.call.bean.AudioOrderMessage;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.voiceengine.WebRtcAudioRecord;
 
-import cn.holo.call.bean.message.ArMarkMessage;
 import cn.holo.call.bean.message.CallAcceptMessage;
 import cn.holo.call.bean.message.CallHangupMessage;
 import cn.holo.call.bean.message.CallInviteMessage;
@@ -58,21 +53,6 @@ public class CallBackgroundService extends Service {
 
     @Override
     public void onCreate() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("launcher", "launcher",
-                    NotificationManager.IMPORTANCE_HIGH);
-
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.createNotificationChannel(channel);
-
-            Notification notification = new Notification.Builder(getApplicationContext(), "launcher").build();
-            startForeground(9927, notification);
-        }
-
-    }
-
-    private void createServer() {
-
 
     }
 
@@ -103,7 +83,8 @@ public class CallBackgroundService extends Service {
 
 
         @Override
-        public void sendMessage(String json) throws RemoteException {
+        public void sendMessage(String json)  {
+            Log.i("lipengfei",json);
             HoloMessage holoMessage = JSON.parseObject(json, HoloMessage.class);
             String action = holoMessage.getAction();
             if (action.equals("api.voice.order")) {
@@ -117,17 +98,16 @@ public class CallBackgroundService extends Service {
             try {
                 JSONObject object = new JSONObject(json);
                 JSONObject content = object.getJSONObject("message").getJSONObject("messageContent");
+
                 if (action.contains("CallAcceptMessage")) {
                     CallAcceptMessage callAcceptMessage = JSON.parseObject(content.toString(), CallAcceptMessage.class);
                     message.setMessageContent(callAcceptMessage);
                 } else if (action.contains("CallHangupMessage")) {
                     CallHangupMessage callHangupMessage = JSON.parseObject(content.toString(), CallHangupMessage.class);
                     message.setMessageContent(callHangupMessage);
-
                     HoloMessage holoMsg = new HoloMessage();
                     holoMsg.setAction("api.audio.unsubscribe");
                     EventBus.getDefault().postSticky(holoMsg);
-
                 } else if (action.contains("CallInviteMessage")) {
                     CallInviteMessage callInviteMessage = JSON.parseObject(content.toString(), CallInviteMessage.class);
                     message.setMessageContent(callInviteMessage);
@@ -142,20 +122,19 @@ public class CallBackgroundService extends Service {
                     message.setMessageContent(imageMessage);
                     EventBus.getDefault().postSticky(imageMessage);
                     return;
+                } else if (action.contains("TextMessage")) {
+                    TextMessage textMessage = JSON.parseObject(content.toString(), TextMessage.class);
+                    EventBus.getDefault().postSticky(textMessage);
+                    return;
+                } else if (action.contains("ArMarkMessage")) {
+                    CallManager.getInstance().onArMarkMessage(message);
+                    return;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 return;
             }
-
-//            MessageType.MSG_TYPE_PIC
-            if (message.getMessageContent() instanceof ArMarkMessage) {
-                CallManager.getInstance().onArMarkMessage(message);
-            } else {
-                if (HoloCallMsgHandler.getInstance().getDeltaTime(message.getUpdated()) < 60000L) {
-                    HoloCallMsgHandler.getInstance().handleMessage(message, 0, false, 0);
-                }
-            }
+            HoloCallMsgHandler.getInstance().handleMessage(message);
         }
 
         /**
@@ -163,16 +142,16 @@ public class CallBackgroundService extends Service {
          * @throws RemoteException
          */
         @Override
-        public void initCallMessage() throws RemoteException {
+        public void initCallMessage(){
 
         }
 
         @Override
-        public void onBindSuccess(String packageName, String serviceName) throws RemoteException {
+        public void onBindSuccess(String packageName, String serviceName)  {
         }
 
         @Override
-        public void onAudioData(AudioMessage audio) throws RemoteException {
+        public void onAudioData(AudioMessage audio) {
             if (audio == null) {
                 return;
             }

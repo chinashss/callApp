@@ -292,7 +292,7 @@ public class WebSocketConnection {
 
     public void sendTextMessage( final String payload){
 
-        executor.execute(new Runnable() {
+         executor.execute(new Runnable() {
             public void run() {
                 if(connectionState == WebSocketConnectionState.CONNECTED ) {
                     client.send( payload );

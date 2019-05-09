@@ -2,14 +2,14 @@ package com.hv.calllib.cameramgr;
 
 import android.content.Context;
 import android.os.Bundle;
-import org.webrtc.R;
 
 import org.webrtc.Camera1Enumerator;
+import org.webrtc.R;
+
 import org.webrtc.Camera2Enumerator;
 import org.webrtc.CameraEnumerator;
 import org.webrtc.FileVideoCapturer;
 import org.webrtc.Logging;
-import org.webrtc.UsbCameraEnumerator;
 import org.webrtc.VideoCapturer;
 
 import java.io.IOException;
@@ -82,14 +82,14 @@ public class CameraManager {
             }
 
             Logging.d(TAG, "Creating capturer using camera2 API.");
-//            videoCapturer = createCameraCapturer(new Camera2Enumerator(context));
-            UsbCameraEnumerator cameraEnumerator = new UsbCameraEnumerator(context);
-            videoCapturer = createCameraCapturer( cameraEnumerator );
+            videoCapturer = createCameraCapturer(new Camera2Enumerator(context));
+//            UsbCameraEnumerator cameraEnumerator = new UsbCameraEnumerator(context);
+//            videoCapturer = createCameraCapturer( cameraEnumerator );
         } else {
             Logging.d(TAG, "Creating capturer using camera1 API.");
-//            videoCapturer = createCameraCapturer(new Camera1Enumerator(capTextureEnabled/*captureToTexture(intent)*/));
-            UsbCameraEnumerator cameraEnumerator = new UsbCameraEnumerator(context);
-            videoCapturer = createCameraCapturer( cameraEnumerator );
+            videoCapturer = createCameraCapturer(new Camera1Enumerator(capTextureEnabled/*captureToTexture(intent)*/));
+//            UsbCameraEnumerator cameraEnumerator = new UsbCameraEnumerator(context);
+//            videoCapturer = createCameraCapturer( cameraEnumerator );
         }
         if (videoCapturer == null) {
             //errorInfo = "Failed to open camera");

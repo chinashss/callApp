@@ -35,6 +35,7 @@ import com.hv.calllib.CallListener;
 import com.hv.calllib.CallManager;
 import com.hv.calllib.CallSession;
 import com.hv.calllib.HoloCall;
+import com.hv.calllib.bean.CloseMessage;
 import com.hv.calllib.bean.HoloEvent;
 import com.hv.imlib.HoloMessage;
 import com.hv.imlib.imservice.event.CaptureImageEvent;
@@ -50,13 +51,11 @@ import com.realview.holo.call.R;
 import com.realview.holo.call.basic.ActivityCollector;
 import com.realview.holo.call.basic.BaseActivity;
 import com.realview.holo.call.bean.AudioOrderMessage;
-import com.hv.calllib.bean.CloseMessage;
 import com.realview.holo.call.bean.Constants;
 import com.realview.holo.call.service.CallBackgroundService;
 import com.realview.holo.call.widget.DiscussionAvatarView;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
-import com.tencent.bugly.beta.upgrade.UpgradeListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -112,11 +111,11 @@ public class MainActivity extends BaseActivity implements CallListener {
         String navi = intentFromApp.getStringExtra("navi");
         NaviRes naviRes = new Gson().fromJson(navi, NaviRes.class);
         CommLib.instance().setNaviRes(naviRes);
-
         HoloCall.routeUrl = intentFromApp.getStringExtra("wss");
-
-
         bindOrderService();
+
+        Log.i("lipengfei", userSelfid + "/" + converstaionType + "/" + roomId + "/" + navi + "/" + HoloCall.routeUrl);
+
         mServiceIntent = new Intent(this, CallBackgroundService.class);
         startService(mServiceIntent);
         HoloCall holoCall = HoloCall.getInstance();
@@ -321,6 +320,7 @@ public class MainActivity extends BaseActivity implements CallListener {
     }
 
     public void onCall(final List<Long> longs, final long userSelfid) {
+        Beta.checkUpgrade(false, true);
         UpgradeInfo upgradeInfo = Beta.getUpgradeInfo();
         if (upgradeInfo != null) {
             if (AppUtils.getAppVersionCode() < upgradeInfo.versionCode) {
@@ -406,6 +406,7 @@ public class MainActivity extends BaseActivity implements CallListener {
     public void onCallDisconnected(CallSession callSession, CallDisconnectedReason callDisconnectedReason) {
         Toast.makeText(MainActivity.this, "视频连接已断开", Toast.LENGTH_SHORT).show();
         ActivityCollector.closeActivity(SuccessActivity.class);
+//        System.exit(0);
 //        if (startWaitTo) {
 //            Intent intent = new Intent(this, CallNoReplyActivity.class);
 //            intent.putExtra(Constants.CALL_LIST, action);

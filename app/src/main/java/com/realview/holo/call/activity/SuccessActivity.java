@@ -1,13 +1,10 @@
 package com.realview.holo.call.activity;
 
 import android.animation.Animator;
-import android.content.Context;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -18,18 +15,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.holo.tvwidget.MetroViewBorderHandler;
 import com.holo.tvwidget.MetroViewBorderImpl;
-import com.holoview.usbcameralib.UVCCameraHelper;
-import com.hv.calllib.HoloCall;
 import com.hv.calllib.bean.CloseMessage;
 import com.hv.calllib.bean.MajorCommand;
 import com.hv.imlib.model.ConversationType;
 import com.hv.imlib.model.message.ImageMessage;
+import com.hv.imlib.model.message.TextMessage;
 import com.realview.commonlibrary.server.manager.UserManager;
 import com.realview.commonlibrary.server.response.UserInfoGetRes;
 import com.realview.holo.call.HoloCallApp;
@@ -45,7 +40,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -166,6 +160,12 @@ public class SuccessActivity extends BaseActivity {
         ivVideoCallImageRemoteShow.setVisibility(View.VISIBLE);
         Glide.with(this).load(message.getRemoteUri()).into(ivVideoCallImageRemoteShow);
         imageHandler.sendEmptyMessageDelayed(0, 10000);
+
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTextReceived(TextMessage message) {
 
     }
 
@@ -298,39 +298,11 @@ public class SuccessActivity extends BaseActivity {
 
     @OnClick(R.id.video_call_camera_change)
     public void onSwitchCamera() {
-//        Intent usbcameraIntent = new Intent(this, UVCCameraActivity.class);
-//        usbcameraIntent.putExtra("usbcamera", 0);
-//        usbcameraIntent.putExtra("launchid", "holoviewcall");
-//        startActivity(usbcameraIntent);
-        HoloCall.getInstance().switchCamera();
-
-//        if (getUSBCamera()) {
-//            boolean ispermiss = UVCCameraHelper.getInstance().requestPermission(0,this);
-//            if (!ispermiss){
-//                UVCCameraHelper.getInstance().release();
-//                Toast.makeText(this, "请检查权限", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//
-//        } else {
-//            Toast.makeText(this, "请检查是否插入摄像头", Toast.LENGTH_SHORT).show();
-//        }
-
-    }
-
-    UsbManager mUsbManager;
-
-    private boolean getUSBCamera() {
-        if (mUsbManager == null) {
-            mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-        }
-        HashMap<String, UsbDevice> deviceList = mUsbManager.getDeviceList();
-        if (deviceList == null || deviceList.isEmpty()) {
-            return false;
-        }
-
-
-        return true;
+        Intent usbcameraIntent = new Intent(this, UVCCameraActivity.class);
+        usbcameraIntent.putExtra("usbcamera", 0);
+        usbcameraIntent.putExtra("launchid", "holoviewcall");
+        startActivity(usbcameraIntent);
+//        HoloCall.getInstance().switchCamera();
     }
 
 }
