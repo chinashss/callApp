@@ -140,5 +140,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-core-ui:26.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable:26.1.0@aar" level="project" />
     <orderEntry type="module" module-name="usbcameralib" />
+    <orderEntry type="module" module-name="usbcameralib" />
   </component>
 </module>
