@@ -12,7 +12,16 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="922a8a0a-41d4-4cd4-aa6e-868019211bc2" name="Default" comment="" />
+    <list default="true" id="922a8a0a-41d4-4cd4-aa6e-868019211bc2" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CallLib/CallLib.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CallLib/CallLib.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CallLib/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/CallLib/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,9 +124,9 @@
     <session id="-126772660">
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="class" value="80" />
-          <entry key="gradle" value="56" />
-          <entry key="java" value="180" />
+          <entry key="class" value="82" />
+          <entry key="gradle" value="58" />
+          <entry key="java" value="183" />
           <entry key="png" value="2" />
           <entry key="pro" value="2" />
           <entry key="properties" value="4" />
@@ -126,10 +135,10 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="80" />
-          <entry key="Groovy" value="56" />
+          <entry key="CLASS" value="82" />
+          <entry key="Groovy" value="58" />
           <entry key="Image" value="2" />
-          <entry key="JAVA" value="180" />
+          <entry key="JAVA" value="183" />
           <entry key="ProGuard File" value="2" />
           <entry key="Properties" value="4" />
           <entry key="XML" value="22" />
@@ -138,7 +147,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="class" value="7" />
-          <entry key="gradle" value="137" />
+          <entry key="gradle" value="141" />
           <entry key="java" value="1286" />
           <entry key="xml" value="36" />
         </counts>
@@ -146,7 +155,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CLASS" value="7" />
-          <entry key="Groovy" value="137" />
+          <entry key="Groovy" value="141" />
           <entry key="JAVA" value="1286" />
           <entry key="XML" value="36" />
         </counts>
@@ -154,7 +163,7 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="22" />
-          <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="11" />
           <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.18" value="1" />
@@ -164,7 +173,7 @@
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.8" value="3" />
           <entry key="project.open.time.9" value="2" />
-          <entry key="project.opened" value="24" />
+          <entry key="project.opened" value="25" />
         </counts>
       </usages-collector>
     </session>
@@ -215,11 +224,68 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-209">
+              <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CallLib/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="95" column="20" selection-start-line="95" selection-start-column="20" selection-end-line="95" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CallLib/src/main/java/org/webrtc/UsbCameraCapturer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="93">
-              <caret line="214" lean-forward="true" selection-start-line="214" selection-end-line="214" />
+            <state relative-caret-position="663">
+              <caret line="214" selection-start-line="214" selection-end-line="214" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/realview/holo/call/activity/UVCCameraActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="452" column="27" selection-start-line="452" selection-start-column="12" selection-end-line="452" selection-end-column="27" />
+              <folding>
+                <element signature="e#12761#12762#0" expanded="true" />
+                <element signature="e#12829#12830#0" expanded="true" />
+                <element signature="e#13689#14614#0" expanded="true" />
+                <element signature="e#14613#14614#0" expanded="true" />
+                <element signature="e#14652#14842#0" expanded="true" />
+                <element signature="e#14841#14842#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/CallManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="325" column="61" selection-start-line="325" selection-start-column="61" selection-end-line="325" selection-end-column="61" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/im-lib-1.0.1.aar/74198f88b912d6b23a0091c0223d8160/jars/classes.jar!/com/hv/imlib/stateMachine/StateMachine.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="181">
+              <caret line="378" column="52" selection-start-line="378" selection-start-column="42" selection-end-line="378" selection-end-column="52" />
+              <folding>
+                <element signature="e#4688#4689#0" expanded="true" />
+                <element signature="e#4726#4727#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -236,9 +302,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getD</find>
-      <find>mUsbManager</find>
-      <find>DeviceFilter</find>
       <find>getDe</find>
       <find>mDeviceFilters</find>
       <find>lipengfei</find>
@@ -266,6 +329,9 @@
       <find>EXTRA_GROUPURL</find>
       <find>send</find>
       <find>onTextureFrameCaptured</find>
+      <find>ivUsbCameraShow</find>
+      <find>getH</find>
+      <find>mSmHandler</find>
     </findStrings>
   </component>
   <component name="GenerateSignedApkSettings">
@@ -2427,7 +2493,6 @@
         <option value="$PROJECT_DIR$/CallLib/src/main/java/org/webrtc/EglRenderer.java" />
         <option value="$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/peermgr/StreamVideoCallPeer.java" />
         <option value="$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/bean/CloseMessage.java" />
-        <option value="$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/CallManager.java" />
         <option value="$PROJECT_DIR$/CallLib/src/main/java/org/webrtc/SurfaceViewRenderer.java" />
         <option value="$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/CallEngine.java" />
         <option value="$PROJECT_DIR$/CallLib/src/main/java/org/webrtc/UsbCameraSession.java" />
@@ -2441,16 +2506,17 @@
         <option value="$PROJECT_DIR$/CallLib/src/main/java/org/webrtc/Camera1CopySession.java" />
         <option value="$PROJECT_DIR$/usbcameralib/src/main/java/com/serenegiant/usb/USBMonitor.java" />
         <option value="$PROJECT_DIR$/usbcameralib/src/main/java/com/holoview/usbcameralib/UVCCameraHelper.java" />
-        <option value="$PROJECT_DIR$/CallLib/build.gradle" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/realview/holo/call/activity/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/realview/holo/call/activity/SuccessActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/realview/holo/call/HoloCallApp.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_bugly_upgrade.xml" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/CallLib/src/main/java/org/webrtc/UsbCameraEnumerator.java" />
         <option value="$PROJECT_DIR$/CallLib/src/main/java/org/webrtc/UsbCameraCapturer.java" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
+        <option value="$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/CallManager.java" />
+        <option value="$PROJECT_DIR$/CallLib/build.gradle" />
       </list>
     </option>
   </component>
@@ -2471,18 +2537,33 @@
           <expand>
             <path>
               <item name="android-glass-callApp" type="1abcf292:AndroidViewProjectNode" />
-              <item name="CallLib" type="feadf853:AndroidModuleNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
             </path>
             <path>
               <item name="android-glass-callApp" type="1abcf292:AndroidViewProjectNode" />
-              <item name="CallLib" type="feadf853:AndroidModuleNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="java" type="edd41e36:AndroidSourceTypeNode" />
             </path>
             <path>
               <item name="android-glass-callApp" type="1abcf292:AndroidViewProjectNode" />
-              <item name="CallLib" type="feadf853:AndroidModuleNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="webrtc" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="com" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="android-glass-callApp" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="com" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="call" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="android-glass-callApp" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="com" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="call" type="462c0819:PsiDirectoryNode" />
+              <item name="activity" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="android-glass-callApp" type="1abcf292:AndroidViewProjectNode" />
@@ -2492,7 +2573,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -2548,6 +2628,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -2573,8 +2654,8 @@
     <property name="ExportApk.SignV2" value="true" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://D:/AndroidProject/android-glass-callApp/app/src/main/java/com/realview/holo/call/activity/SuccessActivity.java" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
-    <property name="device.picker.selection" value="192.168.11.9:5555" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../holo_support_flutter/android" />
+    <property name="device.picker.selection" value="66Y6R15730002725" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../android-comm" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
     <property name="show.do.not.ask.upgrade.gradle.plugin" value="3.0.1" />
     <property name="show.migrate.to.gradle.popup" value="false" />
@@ -2883,12 +2964,12 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32907802" />
-      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.49865952" weight="0.31766382" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.49865952" weight="0.5148936" />
       <window_info anchor="bottom" id="Android Profiler" order="8" weight="0.32907802" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5020107" side_tool="true" weight="0.42978725" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="10" sideWeight="0.49798927" visible="true" weight="0.5900709" />
+      <window_info active="true" anchor="bottom" id="Logcat" order="10" sideWeight="0.49798927" visible="true" weight="0.45106384" />
       <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" weight="0.32907802" />
-      <window_info anchor="bottom" id="Terminal" order="12" weight="0.22836879" />
+      <window_info anchor="bottom" id="Terminal" order="12" weight="0.25957447" />
       <window_info anchor="bottom" id="Flutter Performance" order="13" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="14" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -3001,16 +3082,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/CallLib/src/main/java/org/webrtc/CameraEnumerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="16" column="33" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gradle.properties">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/usbcamera-lib-1.0.0.aar/a476ba781ddb54f72077fa3575ee060d/jars/classes.jar!/com/holoview/usbcameralib/UVCCameraHelper.class" />
     <entry file="file://$PROJECT_DIR$/usbcameralib/src/main/res/xml/device_filter.xml">
       <provider selected="true" editor-type-id="text-editor">
@@ -3076,17 +3147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/realview/holo/call/activity/UVCCameraActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="206" column="69" selection-start-line="203" selection-start-column="7" selection-end-line="206" selection-end-column="69" />
-          <folding>
-            <element signature="e#12761#12762#0" expanded="true" />
-            <element signature="e#12829#12830#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/usbcameralib/src/main/java/com/holoview/usbcameralib/UVCCameraHelper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1247">
@@ -3138,13 +3198,6 @@
       </provider>
       <provider editor-type-id="android-manifest" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="58" column="4" selection-start-line="58" selection-start-column="4" selection-end-line="58" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/realview/holo/call/HoloCallApp.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="134">
@@ -3186,13 +3239,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-209">
           <caret line="10" column="45" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CallLib/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1843">
-          <caret line="97" column="1" selection-start-line="97" selection-start-column="1" selection-end-line="97" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -3271,29 +3317,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/CallManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="51" column="37" selection-start-line="51" selection-start-column="37" selection-end-line="51" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/websocket/WebSocketConnection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-8">
           <caret line="152" column="9" selection-start-line="152" selection-start-column="9" selection-end-line="152" selection-end-column="9" />
-          <folding>
-            <element signature="e#4446#4667#0" expanded="true" />
-            <element signature="e#4666#4667#0" expanded="true" />
-            <element signature="e#4817#5156#0" expanded="true" />
-            <element signature="e#5155#5156#0" expanded="true" />
-            <element signature="e#5266#5596#0" expanded="true" />
-            <element signature="e#5595#5596#0" expanded="true" />
-            <element signature="e#5712#5982#0" expanded="true" />
-            <element signature="e#5981#5982#0" expanded="true" />
-            <element signature="e#9979#10301#0" expanded="true" />
-            <element signature="e#10300#10301#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3327,8 +3354,66 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CallLib/src/main/java/org/webrtc/UsbCameraCapturer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="93">
-          <caret line="214" lean-forward="true" selection-start-line="214" selection-end-line="214" />
+        <state relative-caret-position="663">
+          <caret line="214" selection-start-line="214" selection-end-line="214" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/realview/holo/call/activity/UVCCameraActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="452" column="27" selection-start-line="452" selection-start-column="12" selection-end-line="452" selection-end-column="27" />
+          <folding>
+            <element signature="e#12761#12762#0" expanded="true" />
+            <element signature="e#12829#12830#0" expanded="true" />
+            <element signature="e#13689#14614#0" expanded="true" />
+            <element signature="e#14613#14614#0" expanded="true" />
+            <element signature="e#14652#14842#0" expanded="true" />
+            <element signature="e#14841#14842#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/CallEngineListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1752">
+          <caret line="14" column="45" selection-start-line="14" selection-start-column="38" selection-end-line="14" selection-end-column="45" />
+          <folding>
+            <element signature="e#354#355#0" expanded="true" />
+            <element signature="e#392#393#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CallLib/src/main/java/com/hv/calllib/CallManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="325" column="61" selection-start-line="325" selection-start-column="61" selection-end-line="325" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/im-lib-1.0.1.aar/74198f88b912d6b23a0091c0223d8160/jars/classes.jar!/com/hv/imlib/stateMachine/StateMachine.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="378" column="52" selection-start-line="378" selection-start-column="42" selection-end-line="378" selection-end-column="52" />
+          <folding>
+            <element signature="e#4688#4689#0" expanded="true" />
+            <element signature="e#4726#4727#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-209">
+          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CallLib/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="95" column="20" selection-start-line="95" selection-start-column="20" selection-end-line="95" selection-end-column="20" />
         </state>
       </provider>
     </entry>
