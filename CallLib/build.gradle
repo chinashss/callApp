@@ -91,8 +91,7 @@ dependencies {
     implementation 'holo.com:opencv:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'org.greenrobot:eventbus:3.1.1'
-//    api 'holo.com:im-lib:1.0.2'
-    api 'holo.com:comm-lib:1.0.3'
+    api 'holo.com:comm-lib:1.0.4'
 //    api project(path: ':usbcameralib')
 //    api 'holo.com:usbcamera-lib:1.0.1'
 }
