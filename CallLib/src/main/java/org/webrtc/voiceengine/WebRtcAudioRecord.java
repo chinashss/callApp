@@ -50,13 +50,8 @@ public class WebRtcAudioRecord {
   private final long nativeAudioRecord;
   private final Context context;
 
-  private WebRtcAudioEffects effects = null;
 
   private ByteBuffer byteBuffer;
-
-  //private AudioRecord audioRecord = null;
-  //private AudioRecordThread audioThread = null;
-  //private XAudioRecord mAudioRecord = null;
 
   private static volatile boolean microphoneMute = false;
   private byte[] emptyBytes;
@@ -70,9 +65,6 @@ public class WebRtcAudioRecord {
       WebRtcAudioUtils.logDeviceInfo(TAG);
     }
     mWebRtcAudioRecord = this;
-//        effects = WebRtcAudioEffects.create();
-
-//        mAudioMgr = XAudioRecordMgr.newInstance(context);
   }
 
   public static WebRtcAudioRecord getInstance() {
@@ -93,10 +85,6 @@ public class WebRtcAudioRecord {
 
     Logging.d(TAG, "initRecording(sampleRate=" + sampleRate + ", channels=" + channels + ")");
 
-    //if (mAudioRecord != null) {
-    //  Logging.e(TAG, "InitRecording() called twice without StopRecording()");
-    //  return -1;
-    //}
     final int bytesPerFrame = channels * (BITS_PER_SAMPLE / 8);
     final int framesPerBuffer = sampleRate / BUFFERS_PER_SECOND;
     byteBuffer = ByteBuffer.allocateDirect(bytesPerFrame * framesPerBuffer);
@@ -107,68 +95,11 @@ public class WebRtcAudioRecord {
     // the native class cache the address to the memory once.
     nativeCacheDirectBufferAddress(byteBuffer, nativeAudioRecord);
 
-    // Get the minimum buffer size required for the successful creation of
-    // an AudioRecord object, in byte units.
-    // Note that this size doesn't guarantee a smooth recording under load.
-    /*
-    int minBufferSize = mAudioMgr.getMinBufferSize(
-            sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-    if (minBufferSize == AudioRecord.ERROR || minBufferSize == AudioRecord.ERROR_BAD_VALUE) {
-      Logging.e(TAG, "AudioRecord.getMinBufferSize failed: " + minBufferSize);
-      return -1;
-    }
-    Logging.d(TAG, "AudioRecord.getMinBufferSize: " + minBufferSize);
-    */
-    // Use a larger buffer size than the minimum required when creating the
-    // AudioRecord instance to ensure smooth recording under load. It has been
-    // verified that it does not increase the actual recording latency.
-    //int bufferSizeInBytes = Math.max(BUFFER_SIZE_FACTOR * minBufferSize, byteBuffer.capacity());
-    //Logging.d(TAG, "bufferSizeInBytes: " + bufferSizeInBytes);
-    /*
-    try {
-      mAudioRecord = new XAudioRecord(AudioSource.VOICE_COMMUNICATION, sampleRate,
-              AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
-    } catch (IllegalArgumentException e) {
-      Logging.e(TAG, e.getMessage());
-      return -1;
-    }
-
-    if (mAudioRecord == null || mAudioRecord.getState() != mAudioRecord.STATE_INITIALIZED) {
-      Logging.e(TAG, "Failed to create a new AudioRecord instance");
-      return -1;
-    }
-
-    Logging.d(TAG, "AudioRecord "
-            + "session ID: " + mAudioRecord.getAudioSessionId() + ", "
-            + "audio format: " + mAudioRecord.getAudioFormat() + ", "
-            + "channels: " + mAudioRecord.getChannelCount() + ", "
-            + "sample rate: " + mAudioRecord.getSampleRate());
-    */
-    // TODO(phoglund): put back audioRecord.getBufferSizeInFrames when
-    // all known downstream users supports M.
-    // if (WebRtcAudioUtils.runningOnMOrHigher()) {
-    // Returns the frame count of the native AudioRecord buffer. This is
-    // greater than or equal to the bufferSizeInBytes converted to frame
-    // units. The native frame count may be enlarged to accommodate the
-    // requirements of the source on creation or if the AudioRecord is
-    // subsequently rerouted.
-
-    // Logging.d(TAG, "bufferSizeInFrames: "
-    //     + audioRecord.getBufferSizeInFrames());
-    //}
     return framesPerBuffer;
   }
 
   private boolean startRecording() {
     Logging.d(TAG, "startRecording");
-//        assertTrue(mAudioMgr != null);
-//        //assertTrue(mAudioRecord != null);
-//        if (mAudioMgr.isAudioRecorded() == false) {
-//            mAudioMgr.Subscribe(this);
-//            mAudioMgr.startRecording();
-//        } else {
-//            mAudioMgr.Subscribe(this);
-//        }
 
 
     HandlerThread audioThread = new HandlerThread("AudioThread");
@@ -201,16 +132,13 @@ public class WebRtcAudioRecord {
   private boolean stopRecording() {
     Logging.d(TAG, "stopRecording");
 
-//        assertTrue(mAudioMgr != null);
-//        //assertTrue(mAudioRecord != null);
-//        if (mAudioMgr.isAudioRecorded() == true) {
-//            //mAudioMgr.stopRecording();
-//            mAudioMgr.UnSubscribe(this);
-//        }
-
-    HoloMessage message = new HoloMessage();
-    message.setAction("api.audio.unsubscribe");
-    EventBus.getDefault().post(message);
+    if (handler != null){
+      Handler tHandler = handler;
+      if (tHandler.getLooper() != null){
+        tHandler.getLooper().quit();
+      }
+      handler = null;
+    }
     return true;
   }
 
@@ -232,36 +160,14 @@ public class WebRtcAudioRecord {
     microphoneMute = mute;
   }
 
-//    @Override
-//    public void onAudioData(byte[] audioData) {
-//        Logging.d(TAG, "onAudioData");
-//
-//        //byteBuffer.put(audioData);
-//        if (microphoneMute) {
-//            byteBuffer.clear();
-//            byteBuffer.put(emptyBytes);
-//        } else {
-//            byteBuffer.clear();
-//            byteBuffer.put(audioData);
-//        }
-//
-//        //int cnt = byteBuffer.capacity();
-//        //byte[] bytes = new byte[cnt];
-//        //byteBuffer.get(bytes);
-//        //byteBuffer.get(bytes,0,10);
-//        nativeDataIsRecorded(byteBuffer.capacity(), nativeAudioRecord);
-//    }
-
   public void onAudioData(byte[] audioData) {
-//    Logging.d(TAG, "onAudioData");
-//        int bytesRead = audioRecord.read(byteBuffer, byteBuffer.capacity());
     Message message = new Message();
     message.obj = audioData;
 
-    handler.sendMessage(message);
+    if (handler != null){
+      handler.sendMessage(message);
 
-    //byteBuffer.put(audioData);
-
+    }
   }
 
 

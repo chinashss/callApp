@@ -1145,9 +1145,9 @@ public class CallManager extends StateMachine {
                 case 202:
                 case 204:
                 case 404:
-//                    CallManager.this.stopEngine();
-//                    CallManager.this.transitionTo(CallManager.this.mIdleState);
-                    EventBus.getDefault().post(new CloseMessage());
+                    CallManager.this.stopEngine();
+                    CallManager.this.transitionTo(CallManager.this.mIdleState);
+                    //                    EventBus.getDefault().post(new CloseMessage());
                     break;
                 default:
                     CallManager.this.stopEngine();

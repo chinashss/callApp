@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -217,8 +218,10 @@ public class MainActivity extends BaseActivity implements CallListener {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+
         unbindService(conn);
         stopRing();
+
         action = null;
         Log.d(TAG, "finishActvity");
         if (mServiceIntent != null) {
@@ -399,13 +402,20 @@ public class MainActivity extends BaseActivity implements CallListener {
             startWaitTo = false;
             HoloCall.getInstance().hangUpCall(mSession.getCallId());
         }
-        this.finish();
+
     }
 
     @Override
     public void onCallDisconnected(CallSession callSession, CallDisconnectedReason callDisconnectedReason) {
         Toast.makeText(MainActivity.this, "视频连接已断开", Toast.LENGTH_SHORT).show();
-        ActivityCollector.closeActivity(SuccessActivity.class);
+        new Handler(MainActivity.this.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ActivityCollector.closeActivity(SuccessActivity.class);
+                MainActivity.this.finish();
+                //System.exit(0);
+            }
+        }, 1000);
 //        System.exit(0);
 //        if (startWaitTo) {
 //            Intent intent = new Intent(this, CallNoReplyActivity.class);

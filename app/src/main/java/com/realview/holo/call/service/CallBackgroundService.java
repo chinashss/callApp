@@ -75,7 +75,7 @@ public class CallBackgroundService extends Service {
         super.onTrimMemory(level);
     }
 
-
+    private boolean audioUnsubscribed = false;
     /**
      * 收到的消息
      */
@@ -92,6 +92,9 @@ public class CallBackgroundService extends Service {
                 message.setType(Integer.parseInt(holoMessage.getExtraMsg()));
                 EventBus.getDefault().postSticky(message);
                 return;
+            }
+            if (action.equals("api.audio.unsubscribe")){
+                audioUnsubscribed = true;
             }
 
             Message message = holoMessage.getMessage();
@@ -152,7 +155,7 @@ public class CallBackgroundService extends Service {
 
         @Override
         public void onAudioData(AudioMessage audio) {
-            if (audio == null) {
+            if (audio == null || audioUnsubscribed == true) {
                 return;
             }
             WebRtcAudioRecord record = WebRtcAudioRecord.getInstance();
