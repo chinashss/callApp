@@ -151,7 +151,8 @@ public class StreamVideoCallPeer {
             audioSource.dispose();
             audioSource = null;
         }
-        mediaStream.dispose();
+
+        mediaStream = null;
         Log.d(TAG, "Stopping capture.");
         if (videoCapturer != null) {
             try {

@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -223,6 +224,7 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+
         unbindService(conn);
         stopRing();
         Log.d(TAG, "finishActvity");
@@ -393,7 +395,7 @@ public class MainActivity extends BaseActivity {
             startWaitTo = false;
             HoloCall.getInstance().hangUpCall(CallApp.getInstance().getSession().getCallId());
         }
-        this.finish();
+
     }
 
 
