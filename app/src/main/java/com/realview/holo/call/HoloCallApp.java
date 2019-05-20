@@ -26,16 +26,6 @@ public class HoloCallApp extends MultiDexApplication {
         Beta.autoInit = true;
         Beta.autoCheckUpgrade = false;
         Beta.canShowUpgradeActs.add(MainActivity.class);
-//        Beta.upgradeListener = new UpgradeListener() {
-//            @Override
-//            public void onUpgrade(int i, UpgradeInfo upgradeInfo, boolean b, boolean b1) {
-//                if (upgradeInfo != null) {
-//
-//                }else{
-//
-//                }
-//            }
-//        };
         Bugly.init(getApplicationContext(), "3f45ddcfa3", false);
         Bugly.setAppChannel(getApplicationContext(), "HoloCall");
         UserManager.init(this);

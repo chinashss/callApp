@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.telecom.Call;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -46,11 +47,13 @@ import com.hv.imlib.protocol.http.NaviRes;
 import com.realview.commonlibrary.server.manager.CommLib;
 import com.realview.commonlibrary.server.manager.UserManager;
 import com.realview.commonlibrary.server.response.UserInfoGetRes;
+import com.realview.holo.call.CallApp;
 import com.realview.holo.call.ImageUtil;
 import com.realview.holo.call.R;
 import com.realview.holo.call.basic.ActivityCollector;
 import com.realview.holo.call.basic.BaseActivity;
 import com.realview.holo.call.bean.AudioOrderMessage;
+import com.realview.holo.call.bean.CallStateMessage;
 import com.realview.holo.call.bean.Constants;
 import com.realview.holo.call.service.CallBackgroundService;
 import com.realview.holo.call.widget.DiscussionAvatarView;
@@ -70,7 +73,7 @@ import cn.holo.call.bean.type.CallDisconnectedReason;
 import cn.holo.call.bean.type.CallEngineType;
 import cn.holo.call.bean.type.CallMediaType;
 
-public class MainActivity extends BaseActivity implements CallListener {
+public class MainActivity extends BaseActivity {
     private static String TAG = "MainActivity";
     @BindView(R.id.iv_call_wait_phone)
     ImageView ivCallWaitPhone;
@@ -86,13 +89,6 @@ public class MainActivity extends BaseActivity implements CallListener {
     private ProcessServiceIAidl mProcessAidl;
     private Intent mServiceIntent;
 
-    private CallSession mSession;
-
-
-    private int converstaionType = 0;
-    private long roomId = 0L;
-    private long userSelfid = 0L;
-    private String action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,37 +97,55 @@ public class MainActivity extends BaseActivity implements CallListener {
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         initTVStatusView();
-
-
-        Intent intentFromApp = getIntent();
-        action = intentFromApp.getStringExtra(Constants.CALL_LIST);
-        userSelfid = intentFromApp.getLongExtra("userSelfId", 0L);
-        converstaionType = intentFromApp.getIntExtra("converstaionType", 0);
-        roomId = intentFromApp.getLongExtra("roomId", 0L);
-        String navi = intentFromApp.getStringExtra("navi");
-        NaviRes naviRes = new Gson().fromJson(navi, NaviRes.class);
-        CommLib.instance().setNaviRes(naviRes);
-        HoloCall.routeUrl = intentFromApp.getStringExtra("wss");
+        initData();
         bindOrderService();
-
-        Log.i("lipengfei", userSelfid + "/" + converstaionType + "/" + roomId + "/" + navi + "/" + HoloCall.routeUrl);
-
         mServiceIntent = new Intent(this, CallBackgroundService.class);
         startService(mServiceIntent);
-        HoloCall holoCall = HoloCall.getInstance();
-        holoCall.init(this);
-        holoCall.setVoIPCallListener(this);
-        holoCall.setEnableAllRemoteVideo(false);
-
+        CallApp.getInstance().initListener(this);
         if (CommLib.instance().getNaviRes() == null) {
             Toast.makeText(this, "请从Launcher中启动", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
-        intentFromApp.getExtras().clear();
+//        intentFromApp.getExtras().clear();
+
+        CallApp.getInstance().start();
+        showAvatar();
+
+    }
+
+    private void initData() {
+        Intent intentFromApp = getIntent();
+
+        String navi = intentFromApp.getStringExtra("navi");
+
+        if (TextUtils.isEmpty(navi)) {
+            Toast.makeText(this, "请从Launcher中启动", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+
+        NaviRes naviRes = new Gson().fromJson(navi, NaviRes.class);
+        CommLib.instance().setNaviRes(naviRes);
+
+
+        long userSelfid = intentFromApp.getLongExtra("userSelfId", 0L);
+        CallApp.getInstance().setUserSelfid(userSelfid);
+        String action = intentFromApp.getStringExtra(Constants.CALL_LIST);
         List<Long> longs = JSON.parseArray(action, Long.class);
-        onCall(longs, userSelfid);
-        showAvatar(longs);
+        CallApp.getInstance().addAllRoomUserIds(longs);
+        int converstaionType = intentFromApp.getIntExtra("converstaionType", 0);
+        CallApp.getInstance().setConverstaionType(converstaionType);
+
+        long roomId = intentFromApp.getLongExtra("roomId", 0L);
+        CallApp.getInstance().setRoomId(roomId);
+
+
+
+
+
+        HoloCall.routeUrl = intentFromApp.getStringExtra("wss");
 
 
     }
@@ -139,17 +153,9 @@ public class MainActivity extends BaseActivity implements CallListener {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        action = intent.getStringExtra(Constants.CALL_LIST);
-        userSelfid = intent.getLongExtra("userSelfId", 0L);
-        converstaionType = intent.getIntExtra("converstaionType", 0);
-        roomId = intent.getLongExtra("roomId", 0L);
-        HoloCall.routeUrl = intent.getStringExtra("wss");
-        String navi = intent.getStringExtra("navi");
-        NaviRes naviRes = new Gson().fromJson(navi, NaviRes.class);
-        CommLib.instance().setNaviRes(naviRes);
-        List<Long> longs = JSON.parseArray(action, Long.class);
-        onCall(longs, userSelfid);
-        showAvatar(longs);
+        initData();
+        CallApp.getInstance().start();
+        showAvatar();
     }
 
     private void initTVStatusView() {
@@ -219,7 +225,6 @@ public class MainActivity extends BaseActivity implements CallListener {
         EventBus.getDefault().unregister(this);
         unbindService(conn);
         stopRing();
-        action = null;
         Log.d(TAG, "finishActvity");
         if (mServiceIntent != null) {
             stopService(mServiceIntent);
@@ -227,14 +232,11 @@ public class MainActivity extends BaseActivity implements CallListener {
     }
 
 
-    public void showAvatar(List<Long> longs) {
-        if (longs == null) {
-            return;
-        }
-        for (int i = 0; i < longs.size(); i++) {
-            if (longs.get(i) <= 0) continue;
-            ConversationType type = ConversationType.setValue(converstaionType);
-            UserManager.instance().getUserInfo(ConversationType.P2P == type ? longs.get(i) : roomId, new UserManager.ResultCallback<UserInfoGetRes.ResultBean>() {
+    public void showAvatar() {
+        for (int i = 0; i < CallApp.getInstance().getRoomUserIds().size(); i++) {
+            if (CallApp.getInstance().getRoomUserIds().get(i) <= 0) continue;
+            ConversationType type = ConversationType.setValue(CallApp.getInstance().getConverstaionType());
+            UserManager.instance().getUserInfo(ConversationType.P2P == type ? CallApp.getInstance().getRoomUserIds().get(i) : CallApp.getInstance().getRoomId(), new UserManager.ResultCallback<UserInfoGetRes.ResultBean>() {
                 @Override
                 public void onSuccess(final UserInfoGetRes.ResultBean resultBean) {
                     runOnUiThread(new Runnable() {
@@ -319,33 +321,37 @@ public class MainActivity extends BaseActivity implements CallListener {
         finishActvity();
     }
 
-    public void onCall(final List<Long> longs, final long userSelfid) {
-        Beta.checkUpgrade(false, true);
-        UpgradeInfo upgradeInfo = Beta.getUpgradeInfo();
-        if (upgradeInfo != null) {
-            if (AppUtils.getAppVersionCode() < upgradeInfo.versionCode) {
-                Beta.checkUpgrade();
-                return;
-            }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCallMessage(CallStateMessage message) {
+        switch (message) {
+            case CallOutgoing:
+                startWaiting();
+                break;
+            case CallConnected:
+                connVideoCallSuccess();
+                break;
+            case CallDisconnected:
+                Toast.makeText(MainActivity.this, "视频连接已断开", Toast.LENGTH_SHORT).show();
+                ActivityCollector.closeActivity(SuccessActivity.class);
+//        System.exit(0);
+//        if (startWaitTo) {
+//            Intent intent = new Intent(this, CallNoReplyActivity.class);
+//            intent.putExtra(Constants.CALL_LIST, action);
+//            intent.putExtra("userSelfId", userSelfid);
+//            intent.putExtra("converstaionType", converstaionType);
+//            intent.putExtra("roomId", roomId);
+//            startActivityForResult(intent, Constants.CALL_DIS_CONN);
+//        }
+                break;
+            case RemoteUserJoined:
+                Toast.makeText(MainActivity.this, "对方已经接听", Toast.LENGTH_SHORT).show();
+                break;
+            case MediaTypeChanged:
+                Toast.makeText(MainActivity.this, "对方已经切换为音频聊天", Toast.LENGTH_SHORT).show();
+                break;
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ConversationType type = ConversationType.setValue(converstaionType);
-                CallManager.getInstance().setUserSelfId(userSelfid);
-                HoloCall.needAudio = true;
-                HoloCall.getInstance().startCall(type, ConversationType.P2P == type ? longs.get(0) : roomId, longs, CallMediaType.VIDEO,
-                        CallEngineType.ENGINE_TYPE_NORMAL, null,
-                        103, userSelfid);
-            }
-        }).start();
     }
 
-    @Override
-    public void onCallOutgoing(CallSession callSession, SurfaceView surfaceView) {
-        this.mSession = callSession;
-        startWaiting();
-    }
 
     private void startWaiting() {
         onOutgoingCallRinging();
@@ -368,22 +374,10 @@ public class MainActivity extends BaseActivity implements CallListener {
     }
 
 
-    @Override
-    public void onCallConnected(CallSession callSession, SurfaceView surfaceView) {
-        this.mSession = callSession;
-        Log.i("lipengfei", "conn success");
-        connVideoCallSuccess();
-//        rlVideoCallWaitView.addView(surfaceView);
-    }
-
     private void connVideoCallSuccess() {
         stopRing();
         Intent intent = new Intent(this, SuccessActivity.class);
-        intent.putExtra(Constants.ACTION_TASK_ID, roomId);
         intent.putExtra(Constants.ACTION_CALL_SUCCESS, true);
-        intent.putExtra(Constants.CALL_LIST, action);
-        intent.putExtra(Constants.ACTION_CONVERSTAION_TYPE, converstaionType);
-        intent.putExtra(Constants.ACTION_ROOM_ID, roomId);
         startActivity(intent);
     }
 
@@ -395,62 +389,14 @@ public class MainActivity extends BaseActivity implements CallListener {
         HoloMessage message = new HoloMessage();
         message.setAction("api.audio.unsubscribe");
         EventBus.getDefault().post(message);
-        if (mSession != null) {
+        if (CallApp.getInstance().getSession() != null) {
             startWaitTo = false;
-            HoloCall.getInstance().hangUpCall(mSession.getCallId());
+            HoloCall.getInstance().hangUpCall(CallApp.getInstance().getSession().getCallId());
         }
         this.finish();
     }
 
-    @Override
-    public void onCallDisconnected(CallSession callSession, CallDisconnectedReason callDisconnectedReason) {
-        Toast.makeText(MainActivity.this, "视频连接已断开", Toast.LENGTH_SHORT).show();
-        ActivityCollector.closeActivity(SuccessActivity.class);
-//        System.exit(0);
-//        if (startWaitTo) {
-//            Intent intent = new Intent(this, CallNoReplyActivity.class);
-//            intent.putExtra(Constants.CALL_LIST, action);
-//            intent.putExtra("userSelfId", userSelfid);
-//            intent.putExtra("converstaionType", converstaionType);
-//            intent.putExtra("roomId", roomId);
-//            startActivityForResult(intent, Constants.CALL_DIS_CONN);
-//        }
-    }
 
-    @Override
-    public void onRemoteUserRinging(long l) {
-        String s1 = "";
-    }
-
-    @Override
-    public void onRemoteUserJoined(long l, CallMediaType callMediaType, SurfaceView surfaceView) {
-        Toast.makeText(MainActivity.this, "对方已经接听", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRemoteUserInvited(long l, CallMediaType callMediaType) {
-        String s1 = "";
-    }
-
-    @Override
-    public void onRemoteUserLeft(long l, CallDisconnectedReason callDisconnectedReason) {
-        String s1 = "";
-    }
-
-    @Override
-    public void onMediaTypeChanged(long l, CallMediaType callMediaType, SurfaceView surfaceView) {
-        Toast.makeText(MainActivity.this, "对方已经切换为音频聊天", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onError(CallCommon.CallErrorCode callErrorCode) {
-        String s1 = "";
-    }
-
-    @Override
-    public void onRemoteCameraDisabled(long l, boolean b) {
-        String s1 = "";
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSendCaptureImageEvent(HoloEvent event) {
@@ -494,8 +440,8 @@ public class MainActivity extends BaseActivity implements CallListener {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.CALL_DIS_CONN) {
             if (resultCode == Activity.RESULT_OK) {
-                List<Long> longs = JSON.parseArray(action, Long.class);
-                onCall(longs, userSelfid);
+//                List<Long> longs = JSON.parseArray(action, Long.class);
+//                onCall(longs, userSelfid);
             } else if (resultCode == -100) {
                 //主动关闭 并且要让launcher退出登录
                 finishActvity();

@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.holo.tvwidget.MetroViewBorderHandler;
 import com.holo.tvwidget.MetroViewBorderImpl;
@@ -27,6 +26,7 @@ import com.hv.imlib.model.message.ImageMessage;
 import com.hv.imlib.model.message.TextMessage;
 import com.realview.commonlibrary.server.manager.UserManager;
 import com.realview.commonlibrary.server.response.UserInfoGetRes;
+import com.realview.holo.call.CallApp;
 import com.realview.holo.call.HoloCallApp;
 import com.realview.holo.call.R;
 import com.realview.holo.call.basic.ActivityCollector;
@@ -39,8 +39,6 @@ import com.realview.holo.call.widget.DiscussionAvatarView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +66,8 @@ public class SuccessActivity extends BaseActivity {
     ImageView ivSuccessLogo;
     @BindView(R.id.tv_video_status)
     TextView tvVideoStatus;
+    @BindView(R.id.content)
+    FrameLayout content;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,15 +81,9 @@ public class SuccessActivity extends BaseActivity {
         initTVStatusView();
         initUSBCamera();
         startCountdown();
-        long taskId = getIntent().getLongExtra(Constants.ACTION_TASK_ID, 0L);
-        tvTaskId.setText("工单号：" + taskId);
-
-        String callList = getIntent().getStringExtra(Constants.CALL_LIST);
-        if (TextUtils.isEmpty(callList)) {
-            return;
-        }
-        List<Long> longs = JSON.parseArray(callList, Long.class);
-        showAvatar(longs);
+        tvTaskId.setText("工单号：" + CallApp.getInstance().getRoomId());
+        showAvatar();
+        content.addView(CallApp.getInstance().getSurfaceView());
     }
 
     private void initUSBCamera() {
@@ -97,11 +91,11 @@ public class SuccessActivity extends BaseActivity {
     }
 
 
-    public void showAvatar(List<Long> longs) {
-        for (int i = 0; i < longs.size(); i++) {
-            if (longs.get(i) <= 0) continue;
-            ConversationType type = ConversationType.setValue(getIntent().getIntExtra(Constants.ACTION_CONVERSTAION_TYPE, 0));
-            UserManager.instance().getUserInfo(ConversationType.P2P == type ? longs.get(i) : getIntent().getLongExtra(Constants.ACTION_ROOM_ID, 0L), new UserManager.ResultCallback<UserInfoGetRes.ResultBean>() {
+    public void showAvatar() {
+        for (int i = 0; i < CallApp.getInstance().getRoomUserIds().size(); i++) {
+            if (CallApp.getInstance().getRoomUserIds().get(i) <= 0) continue;
+            ConversationType type = ConversationType.setValue(CallApp.getInstance().getConverstaionType());
+            UserManager.instance().getUserInfo(ConversationType.P2P == type ? CallApp.getInstance().getRoomUserIds().get(i) : CallApp.getInstance().getRoomId(), new UserManager.ResultCallback<UserInfoGetRes.ResultBean>() {
                 @Override
                 public void onSuccess(final UserInfoGetRes.ResultBean resultBean) {
                     runOnUiThread(new Runnable() {
@@ -110,8 +104,6 @@ public class SuccessActivity extends BaseActivity {
                             daview.addData(resultBean.getPortrait(), (TextUtils.isEmpty(resultBean.getNickname()) ? resultBean.getUsername() : resultBean.getNickname()));
                         }
                     });
-
-
                 }
 
                 @Override
@@ -148,7 +140,7 @@ public class SuccessActivity extends BaseActivity {
         if (message.getType() == 115) {
             //挂断
             closeApp();
-        }else if (message.getType()==121){
+        } else if (message.getType() == 121) {
             if (ActivityCollector.isActivityTop(UVCCameraActivity.class, this)) {
                 onSwitchCamera();
             }

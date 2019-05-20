@@ -61,7 +61,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UVCCameraActivity extends BaseActivity implements CameraDialog.CameraDialogParent, CameraViewInterface.Callback {
+public class UVCCameraActivity extends BaseActivity implements  CameraViewInterface.Callback {
     private static final String TAG = "UVCCameraActivity";
 
     @BindView(R.id.camera_view)
@@ -268,7 +268,6 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
     }
 
     private void RequestPermission() {
-
         if (Build.VERSION.SDK_INT >= 23) {
             String[] PERMISSIONS_STORAGE = {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -292,17 +291,6 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
         isDestroyed = false;
     }
 
-    @Override
-    public USBMonitor getUSBMonitor() {
-        return mCameraHelper.getUSBMonitor();
-    }
-
-    @Override
-    public void onDialogResult(boolean canceled) {
-        if (canceled) {
-            showShortMsg("取消操作");
-        }
-    }
 
 
     @Override
@@ -380,17 +368,6 @@ public class UVCCameraActivity extends BaseActivity implements CameraDialog.Came
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-
-        /*
-        FileUtils.releaseFile();
-        // step.4 release uvc camera resources
-        if (mCameraHelper != null) {
-            mCameraHelper.release();
-        }
-
-        //UnRegisterVoiceCmd();
-        */
-
         this.destroy();
     }
 
