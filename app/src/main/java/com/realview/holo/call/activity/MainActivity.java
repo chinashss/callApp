@@ -9,18 +9,16 @@ import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.telecom.Call;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -32,10 +30,7 @@ import com.holo.tvwidget.MetroItemFrameLayout;
 import com.holo.tvwidget.MetroViewBorderHandler;
 import com.holo.tvwidget.MetroViewBorderImpl;
 import com.holoview.aidl.ProcessServiceIAidl;
-import com.hv.calllib.CallCommon;
-import com.hv.calllib.CallListener;
 import com.hv.calllib.CallManager;
-import com.hv.calllib.CallSession;
 import com.hv.calllib.HoloCall;
 import com.hv.calllib.bean.CloseMessage;
 import com.hv.calllib.bean.HoloEvent;
@@ -58,8 +53,6 @@ import com.realview.holo.call.bean.CallStateMessage;
 import com.realview.holo.call.bean.Constants;
 import com.realview.holo.call.service.CallBackgroundService;
 import com.realview.holo.call.widget.DiscussionAvatarView;
-import com.tencent.bugly.beta.Beta;
-import com.tencent.bugly.beta.UpgradeInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,9 +63,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.holo.call.bean.type.CallDisconnectedReason;
-import cn.holo.call.bean.type.CallEngineType;
-import cn.holo.call.bean.type.CallMediaType;
 
 public class MainActivity extends BaseActivity {
     private static String TAG = "MainActivity";
@@ -86,6 +76,8 @@ public class MainActivity extends BaseActivity {
     MetroItemFrameLayout stop;
     @BindView(R.id.rl_video_call_wait_view)
     DrawingOrderRelativeLayout rlVideoCallWaitView;
+    @BindView(R.id.tv_app_version)
+    TextView tvAppVersion;
 
     private ProcessServiceIAidl mProcessAidl;
     private Intent mServiceIntent;
@@ -100,6 +92,10 @@ public class MainActivity extends BaseActivity {
         initTVStatusView();
         initData();
         bindOrderService();
+        String appVerisonName = AppUtils.getAppVersionName();
+        if (appVerisonName != null) {
+            tvAppVersion.setText(appVerisonName);
+        }
         mServiceIntent = new Intent(this, CallBackgroundService.class);
         startService(mServiceIntent);
         CallApp.getInstance().initListener(this);
@@ -109,6 +105,7 @@ public class MainActivity extends BaseActivity {
             return;
         }
 //        intentFromApp.getExtras().clear();
+
 
         CallApp.getInstance().start();
         showAvatar();
@@ -141,9 +138,6 @@ public class MainActivity extends BaseActivity {
 
         long roomId = intentFromApp.getLongExtra("roomId", 0L);
         CallApp.getInstance().setRoomId(roomId);
-
-
-
 
 
         HoloCall.routeUrl = intentFromApp.getStringExtra("wss");
@@ -335,6 +329,8 @@ public class MainActivity extends BaseActivity {
             case CallDisconnected:
                 Toast.makeText(MainActivity.this, "视频连接已断开", Toast.LENGTH_SHORT).show();
                 ActivityCollector.closeActivity(SuccessActivity.class);
+                ActivityCollector.closeActivity(UVCCameraActivity.class);
+                finish();
 //        System.exit(0);
 //        if (startWaitTo) {
 //            Intent intent = new Intent(this, CallNoReplyActivity.class);
@@ -397,7 +393,6 @@ public class MainActivity extends BaseActivity {
         }
 
     }
-
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)

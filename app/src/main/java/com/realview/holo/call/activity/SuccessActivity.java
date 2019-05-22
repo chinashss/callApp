@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.holo.tvwidget.MetroItemFrameLayout;
 import com.holo.tvwidget.MetroViewBorderHandler;
 import com.holo.tvwidget.MetroViewBorderImpl;
 import com.hv.calllib.bean.CloseMessage;
@@ -68,6 +69,7 @@ public class SuccessActivity extends BaseActivity {
     TextView tvVideoStatus;
     @BindView(R.id.content)
     FrameLayout content;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -297,4 +299,12 @@ public class SuccessActivity extends BaseActivity {
 //        HoloCall.getInstance().switchCamera();
     }
 
+    @OnClick(R.id.fl_show_preview)
+    public void onPreview() {
+        if (content.getVisibility() == View.VISIBLE) {
+            content.setVisibility(View.INVISIBLE);
+        } else {
+            content.setVisibility(View.VISIBLE);
+        }
+    }
 }

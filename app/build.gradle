@@ -6,8 +6,8 @@ android {
         applicationId "com.realview.holo.call"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 7
-        versionName "1.1.0"
+        versionCode 8
+        versionName "1.0.8"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a","armeabi"

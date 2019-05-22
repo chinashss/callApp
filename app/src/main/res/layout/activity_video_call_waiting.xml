@@ -71,6 +71,18 @@
             android:textColor="@color/white"
             android:textSize="22sp" />
 
+
+        <TextView
+            android:id="@+id/tv_app_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="20dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+
     </com.holo.tvwidget.DrawingOrderRelativeLayout>
 
 
