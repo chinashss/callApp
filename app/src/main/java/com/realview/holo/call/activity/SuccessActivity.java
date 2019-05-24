@@ -9,7 +9,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.holo.tvwidget.MetroItemFrameLayout;
 import com.holo.tvwidget.MetroViewBorderHandler;
 import com.holo.tvwidget.MetroViewBorderImpl;
 import com.hv.calllib.bean.CloseMessage;
@@ -40,6 +38,9 @@ import com.realview.holo.call.widget.DiscussionAvatarView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,6 +70,10 @@ public class SuccessActivity extends BaseActivity {
     TextView tvVideoStatus;
     @BindView(R.id.content)
     FrameLayout content;
+    @BindView(R.id.tv_message_text)
+    TextView tvMessageText;
+    @BindView(R.id.tv_show_preview_tips)
+    TextView tvShowPreviewTips;
 
 
     @Override
@@ -95,9 +100,11 @@ public class SuccessActivity extends BaseActivity {
 
     public void showAvatar() {
         for (int i = 0; i < CallApp.getInstance().getRoomUserIds().size(); i++) {
-            if (CallApp.getInstance().getRoomUserIds().get(i) <= 0) continue;
+            final long userId = CallApp.getInstance().getRoomUserIds().get(i);
+            if (userId <= 0)
+                continue;
             ConversationType type = ConversationType.setValue(CallApp.getInstance().getConverstaionType());
-            UserManager.instance().getUserInfo(ConversationType.P2P == type ? CallApp.getInstance().getRoomUserIds().get(i) : CallApp.getInstance().getRoomId(), new UserManager.ResultCallback<UserInfoGetRes.ResultBean>() {
+            UserManager.instance().getUserInfo(ConversationType.P2P == type ? userId : CallApp.getInstance().getRoomId(), new UserManager.ResultCallback<UserInfoGetRes.ResultBean>() {
                 @Override
                 public void onSuccess(final UserInfoGetRes.ResultBean resultBean) {
                     runOnUiThread(new Runnable() {
@@ -110,7 +117,12 @@ public class SuccessActivity extends BaseActivity {
 
                 @Override
                 public void onError(String errString) {
-                    Log.d("lipengfei", "errString: " + errString);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            daview.addData("asd", String.valueOf(userId));
+                        }
+                    });
                 }
             });
         }
@@ -160,7 +172,13 @@ public class SuccessActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onTextReceived(TextMessage message) {
-
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm");//设置日期格式
+        tvMessageText.append(df.format(new Date()));
+        tvMessageText.append(" ");
+        tvMessageText.append(message.getUserInfo().getUsername().trim());
+        tvMessageText.append("：");
+        tvMessageText.append(message.getContent().trim());
+        tvMessageText.append("\n");
     }
 
     Handler imageHandler = new Handler() {
@@ -303,8 +321,10 @@ public class SuccessActivity extends BaseActivity {
     public void onPreview() {
         if (content.getVisibility() == View.VISIBLE) {
             content.setVisibility(View.INVISIBLE);
+            tvShowPreviewTips.setText("开启本地画面");
         } else {
             content.setVisibility(View.VISIBLE);
+            tvShowPreviewTips.setText("关闭本地画面");
         }
     }
 }
