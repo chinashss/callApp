@@ -1,14 +1,25 @@
 package com.realview.holo.call;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.util.Log;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.blankj.utilcode.util.AppUtils;
+import com.holoview.aidl.ProcessServiceIAidl;
 import com.hv.calllib.CallCommon;
 import com.hv.calllib.CallListener;
 import com.hv.calllib.CallManager;
 import com.hv.calllib.CallSession;
 import com.hv.calllib.HoloCall;
+import com.hv.imlib.HoloMessage;
 import com.hv.imlib.model.ConversationType;
 import com.realview.holo.call.bean.CallStateMessage;
 import com.tencent.bugly.beta.Beta;
@@ -37,7 +48,7 @@ public class CallApp implements CallListener {
 
 
     private SurfaceView mSurfaceView;
-    
+
 
     private List<Long> roomUserIds = new ArrayList<>();
 
@@ -51,6 +62,57 @@ public class CallApp implements CallListener {
     }
 
 
+    public void bindOrderService() {
+        Intent intent = new Intent("com.holoview.hololauncher.BackgroundService");
+        intent.setPackage("com.holoview.hololauncher");
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        HoloCallApp.getApp().bindService(intent, conn, Context.BIND_AUTO_CREATE);
+    }
+
+
+    ServiceConnection conn = new ServiceConnection() {//这个最重要，用于连接Service
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.i("MainActivity.conn", "@@ onServiceConnected name=" + name);
+            ProcessServiceIAidl aidl = ProcessServiceIAidl.Stub.asInterface(service);
+            mProcessAidl = aidl;
+            try {
+                mProcessAidl.initCallMessage();
+                mProcessAidl.onBindSuccess("com.realview.holo.call", "com.realview.holo.call.service.CallBackgroundService");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                service.linkToDeath(deathRecipient, 0);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.i("MainActivity.conn", "@@ onServiceDisconnected name=" + name);
+        }
+    };
+
+
+    private ProcessServiceIAidl mProcessAidl;
+
+    //注册一个死亡代理，监测连接状态
+    IBinder.DeathRecipient deathRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            Log.i("MainActivity", "@@ binderDied " + (mProcessAidl == null));
+            if (mProcessAidl == null) {
+                return;
+            }
+            mProcessAidl.asBinder().unlinkToDeath(deathRecipient, 0);
+            mProcessAidl = null;
+            //重新绑定
+            bindOrderService();
+        }
+    };
+
     public void initListener(Context mContext) {
         HoloCall holoCall = HoloCall.getInstance();
         holoCall.init(mContext);
@@ -58,6 +120,22 @@ public class CallApp implements CallListener {
         holoCall.setEnableAllRemoteVideo(false);
     }
 
+    public void disConn() {
+        HoloCallApp.getApp().unbindService(conn);
+    }
+
+
+    public void sendMessage(HoloMessage message){
+        try {
+            String jsonString = JSON.toJSONString(message, SerializerFeature.WriteMapNullValue);
+            Log.i("TAG", jsonString);
+            if (mProcessAidl != null) {
+                mProcessAidl.sendMessage(jsonString);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void start() {
         Beta.checkUpgrade(false, true);
@@ -76,8 +154,8 @@ public class CallApp implements CallListener {
                 ConversationType type = ConversationType.setValue(converstaionType);
                 CallManager.getInstance().setUserSelfId(userSelfid);
                 HoloCall.needAudio = true;
-                HoloCall.getInstance().startCall(type,
-                        ConversationType.P2P == type ? roomUserIds.get(0) : roomId,
+                long callTargerId = ConversationType.P2P == type ? roomUserIds.get(0) : roomId;
+                HoloCall.getInstance().startCall(type, callTargerId,
                         roomUserIds,
                         CallMediaType.VIDEO,
                         CallEngineType.ENGINE_TYPE_NORMAL,
@@ -131,24 +209,40 @@ public class CallApp implements CallListener {
     }
 
 
-
     @Override
     public void onCallOutgoing(CallSession var1, SurfaceView var2) {
-        this.mSession=var1;
+        this.mSession = var1;
         this.mSurfaceView = var2;
         EventBus.getDefault().postSticky(CallStateMessage.CallOutgoing);
     }
 
     @Override
     public void onCallConnected(CallSession var1, SurfaceView var2) {
-        this.mSession=var1;
-        this.mSurfaceView=var2;
+        this.mSession = var1;
+        this.mSurfaceView = var2;
         EventBus.getDefault().postSticky(CallStateMessage.CallConnected);
     }
 
     @Override
-    public void onCallDisconnected(CallSession var1, CallDisconnectedReason var2) {
-        EventBus.getDefault().postSticky(CallStateMessage.CallDisconnected);
+    public void onCallDisconnected(CallSession session, CallDisconnectedReason reason) {
+        switch (reason) {
+            case BUSY_LINE:
+            case REMOTE_BUSY_LINE:
+                Toast.makeText(HoloCallApp.getApp(), "对方正忙，请稍后再试", Toast.LENGTH_LONG).show();
+                break;
+            case HANGUP:
+            case REMOTE_HANGUP:
+            case REJECT:
+            case REMOTE_CANCEL:
+            case REMOTE_REJECT:
+                Toast.makeText(HoloCallApp.getApp(), "对方已拒绝", Toast.LENGTH_LONG).show();
+                break;
+            case NO_RESPONSE:
+            case REMOTE_NO_RESPONSE:
+                Toast.makeText(HoloCallApp.getApp(), "暂时无人接听", Toast.LENGTH_LONG).show();
+                break;
+        }
+        EventBus.getDefault().post(CallStateMessage.CallDisconnected);
     }
 
     @Override

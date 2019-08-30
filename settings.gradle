@@ -1,2 +1,2 @@
-include ':app' , ':usbcameralib', ':CallLib'
+include ':app', ':usbcameralib', ':CallLib', ':tvlib'
 

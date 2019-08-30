@@ -1,10 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: holo.com:mqtt-service:1.0.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/05a652dddcc5469871aa9703c3f4f2f6/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/05a652dddcc5469871aa9703c3f4f2f6/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/44881a089ee5acb0ea63616a20384151/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/44881a089ee5acb0ea63616a20384151/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/holo.com/mqtt-service/1.0.0/125687ab27c7ff63ec1ea2aa3f60a4e3351472ab/mqtt-service-1.0.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

@@ -57,7 +57,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
         android:layout_marginRight="48dp"
-        android:text="切换摄像头"
+        android:text="本机拍摄"
         android:textColor="#ffffffff"
         android:textSize="22sp" />
 

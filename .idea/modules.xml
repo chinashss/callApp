@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/CallLib/CallLib.iml" filepath="$PROJECT_DIR$/CallLib/CallLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-glass-callApp.iml" filepath="$PROJECT_DIR$/android-glass-callApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tvlib/tvlib.iml" filepath="$PROJECT_DIR$/tvlib/tvlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/usbcameralib/usbcameralib.iml" filepath="$PROJECT_DIR$/usbcameralib/usbcameralib.iml" />
     </modules>
   </component>

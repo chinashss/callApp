@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.tencent.bugly:crashreport_upgrade:1.3.9@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/25e0a7b51e94473053ad0706f8a1d7a4/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/25e0a7b51e94473053ad0706f8a1d7a4/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4daefaafd4181a4d0a056195ae613551/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4daefaafd4181a4d0a056195ae613551/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

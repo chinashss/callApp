@@ -19,15 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.holo.tvwidget.DrawingOrderRelativeLayout;
-import com.holo.tvwidget.MetroItemFrameLayout;
-import com.holo.tvwidget.MetroViewBorderHandler;
-import com.holo.tvwidget.MetroViewBorderImpl;
 import com.holoview.usbcameralib.UVCCameraHelper;
 import com.holoview.usbcameralib.utils.FileUtils;
 import com.hv.calllib.bean.CaptureImageEvent;
@@ -41,42 +35,41 @@ import com.realview.holo.call.basic.ActivityCollector;
 import com.realview.holo.call.basic.BaseActivity;
 import com.realview.holo.call.bean.AudioOrderMessage;
 import com.realview.holo.call.bean.Constants;
-import com.serenegiant.usb.CameraDialog;
-import com.serenegiant.usb.Size;
-import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.common.AbstractUVCCameraHandler;
 import com.serenegiant.usb.widget.CameraViewInterface;
 import com.serenegiant.usb.widget.UVCCameraTextureView;
 
+import org.evilbinary.tv.widget.BorderEffect;
+import org.evilbinary.tv.widget.BorderView;
+import org.evilbinary.tv.widget.RoundedFrameLayout;
+import org.evilbinary.tv.widget.TvZorderRelativeLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UVCCameraActivity extends BaseActivity implements  CameraViewInterface.Callback {
+public class UVCCameraActivity extends BaseActivity implements CameraViewInterface.Callback {
     private static final String TAG = "UVCCameraActivity";
 
     @BindView(R.id.camera_view)
     UVCCameraTextureView mTextureView;
 
     @BindView(R.id.mif_switch_camera)
-    MetroItemFrameLayout mifSwitchCamera;
+    RoundedFrameLayout mifSwitchCamera;
     @BindView(R.id.mif_take_photo)
-    MetroItemFrameLayout mifTakePhoto;
+    RoundedFrameLayout mifTakePhoto;
     @BindView(R.id.iv_usb_camera_show)
     ImageView ivUsbCameraShow;
     @BindView(R.id.fl_lines)
     ImageView flLines;
     @BindView(R.id.dor_extra_content)
-    DrawingOrderRelativeLayout dorExtraContent;
+    TvZorderRelativeLayout dorExtraContent;
 
     private UVCCameraHelper mCameraHelper;
     private CameraViewInterface mUVCCameraView;
@@ -95,6 +88,9 @@ public class UVCCameraActivity extends BaseActivity implements  CameraViewInterf
     //private VoiceCmdEngine voiceCmdEngine = null;
     //private UVCCameraActivity.UIHandler uiHandler;
 
+
+    private Toast mToast;
+
     private UVCCameraHelper.OnMyDevConnectListener listener = new UVCCameraHelper.OnMyDevConnectListener() {
 
         @Override
@@ -107,7 +103,7 @@ public class UVCCameraActivity extends BaseActivity implements  CameraViewInterf
             if (!isRequest) {
                 isRequest = true;
                 if (mCameraHelper != null) {
-                    mCameraHelper.requestPermission(0,UVCCameraActivity.this);
+                    mCameraHelper.requestPermission(0, UVCCameraActivity.this);
                 }
             }
         }
@@ -172,7 +168,7 @@ public class UVCCameraActivity extends BaseActivity implements  CameraViewInterf
             if (ActivityCollector.isActivityTop(UVCCameraActivity.class, this)) {
                 finish();
             }
-        }else if (message.getType()==121){
+        } else if (message.getType() == 121) {
             if (ActivityCollector.isActivityTop(UVCCameraActivity.class, this)) {
                 finish();
             }
@@ -206,7 +202,6 @@ public class UVCCameraActivity extends BaseActivity implements  CameraViewInterf
         mCameraHelper.setDefaultPreviewSize(640, 480);
         mCameraHelper.initUSBMonitor(this, mUVCCameraView, listener);
 
-
         mCameraHelper.setOnPreviewFrameListener(new AbstractUVCCameraHandler.OnPreViewResultListener() {
             @Override
             public void onPreviewResult(byte[] nv21Yuv) {
@@ -219,38 +214,45 @@ public class UVCCameraActivity extends BaseActivity implements  CameraViewInterf
 
     private void initTVStatusView() {
         FrameLayout roundedFrameLayout = new FrameLayout(this);
-        final MetroViewBorderImpl metroViewBorderImpl = new MetroViewBorderImpl(roundedFrameLayout);
-        metroViewBorderImpl.setBackgroundResource(R.drawable.border_color);
+        roundedFrameLayout.setClipChildren(false);
 
-        ViewGroup list = findViewById(R.id.dor_extra_content);
-        metroViewBorderImpl.attachTo(list);
+        final BorderView borderView = new BorderView(roundedFrameLayout);
+        borderView.setBackgroundResource(R.drawable.border_color);
 
-        metroViewBorderImpl.getViewBorder().addOnFocusChanged(new MetroViewBorderHandler.FocusListener() {
+        ViewGroup list = (ViewGroup) findViewById(R.id.dor_extra_content);
+        borderView.attachTo(list);
+
+
+        borderView.getEffect().addOnFocusChanged(new BorderEffect.FocusListener() {
             @Override
             public void onFocusChanged(View oldFocus, final View newFocus) {
-                metroViewBorderImpl.getView().setTag(newFocus);
+                borderView.getView().setTag(newFocus);
+
             }
         });
-        metroViewBorderImpl.getViewBorder().addAnimatorListener(new Animator.AnimatorListener() {
+        borderView.getEffect().addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                View t = metroViewBorderImpl.getView().findViewWithTag("top");
+                View t = borderView.getView().findViewWithTag("top");
                 if (t != null) {
                     ((ViewGroup) t.getParent()).removeView(t);
-                    View of = (View) metroViewBorderImpl.getView().getTag(metroViewBorderImpl.getView().getId());
+                    View of = (View) borderView.getView().getTag(borderView.getView().getId());
                     ((ViewGroup) of).addView(t);
+
                 }
+
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                View nf = (View) metroViewBorderImpl.getView().getTag();
+                View nf = (View) borderView.getView().getTag();
                 if (nf != null) {
                     View top = nf.findViewWithTag("top");
                     if (top != null) {
                         ((ViewGroup) top.getParent()).removeView(top);
-                        ((ViewGroup) metroViewBorderImpl.getView()).addView(top);
-                        metroViewBorderImpl.getView().setTag(metroViewBorderImpl.getView().getId(), nf);
+                        ((ViewGroup) borderView.getView()).addView(top);
+                        borderView.getView().setTag(borderView.getView().getId(), nf);
+
                     }
                 }
             }
@@ -265,6 +267,7 @@ public class UVCCameraActivity extends BaseActivity implements  CameraViewInterf
 
             }
         });
+
     }
 
     private void RequestPermission() {
@@ -290,7 +293,6 @@ public class UVCCameraActivity extends BaseActivity implements  CameraViewInterf
         isFinishing = false;
         isDestroyed = false;
     }
-
 
 
     @Override
@@ -367,31 +369,19 @@ public class UVCCameraActivity extends BaseActivity implements  CameraViewInterf
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy");
+        if (mToast != null) {
+            mToast.cancel();
+        }
         this.destroy();
     }
 
     private void showShortMsg(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    public boolean isCameraOpened() {
-        return mCameraHelper.isCameraOpened();
-    }
-
-    // example: {640x480,320x240,etc}
-    private List<String> getResolutionList() {
-        List<Size> list = mCameraHelper.getSupportedPreviewSizes();
-        List<String> resolutions = null;
-        if (list != null && list.size() != 0) {
-            resolutions = new ArrayList<>();
-            for (Size size : list) {
-                if (size != null) {
-                    resolutions.add(size.width + "x" + size.height);
-                }
-            }
+        if (mToast == null) {
+            mToast = Toast.makeText(HoloCallApp.getApp(), msg, Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(msg);
         }
-        return resolutions;
+        mToast.show();
     }
 
 
@@ -407,17 +397,25 @@ public class UVCCameraActivity extends BaseActivity implements  CameraViewInterf
             public void onCaputreResult(final byte[] data) {
                 Log.d(TAG, "TakePhoto" + data.length);
                 inSendingProgress = true;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ivUsbCameraShow.setVisibility(View.VISIBLE);
-                        FastYUVtoRGB fastYUVtoRGB = new FastYUVtoRGB(UVCCameraActivity.this);
-                        bitmap = fastYUVtoRGB.convertYUVtoRGB(data, UVCCameraHelper.getInstance().getPreviewWidth(), UVCCameraHelper.getInstance().getPreviewHeight());
-                        ivUsbCameraShow.setImageBitmap(bitmap);
-                        imageHandler.sendEmptyMessageDelayed(0, 4000);
-                        PostSendPICMessage();
-                    }
-                });
+                try {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ivUsbCameraShow.setVisibility(View.VISIBLE);
+                            FastYUVtoRGB fastYUVtoRGB = new FastYUVtoRGB(UVCCameraActivity.this);
+                            bitmap = fastYUVtoRGB.convertYUVtoRGB(data, UVCCameraHelper.getInstance().getPreviewWidth(), UVCCameraHelper.getInstance().getPreviewHeight());
+                            ivUsbCameraShow.setImageBitmap(bitmap);
+
+                            imageHandler.sendEmptyMessageDelayed(0, 4000);
+                            PostSendPICMessage();
+
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    bitmap.recycle();
+                }
             }
         });
 

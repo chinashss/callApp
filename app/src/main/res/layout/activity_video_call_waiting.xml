@@ -6,7 +6,7 @@
     android:clipToPadding="false"
     android:focusable="false">
 
-    <com.holo.tvwidget.DrawingOrderRelativeLayout
+    <org.evilbinary.tv.widget.TvZorderRelativeLayout
         android:id="@+id/rl_video_call_wait_view"
         android:layout_width="720dp"
         android:layout_height="420dp"
@@ -25,32 +25,26 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="75dp"
-            android:text="正在呼叫专家"
+            android:text="正在呼叫中..."
             android:textColor="#ffffffff"
             android:textSize="34sp" />
 
-        <com.realview.holo.call.widget.DiscussionAvatarView
-            android:id="@+id/daview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            app:imageRadius="96"
-            app:isLastComplete="true"
-            app:isShowAnimation="false"
-            app:isShowFrame="false"
-            app:maxCount="6"
-            app:space="0.5" />
 
-        <com.holo.tvwidget.MetroItemFrameLayout
+        <ImageView
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="36dp"
+            android:src="@mipmap/ic_default_avatar" />
+
+
+        <org.evilbinary.tv.widget.RoundedFrameLayout
             android:id="@+id/stop"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="50dp"
             android:focusable="true"
             app:radius="4dp">
 
@@ -59,7 +53,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@mipmap/ic_video_call_stop" />
-        </com.holo.tvwidget.MetroItemFrameLayout>
+        </org.evilbinary.tv.widget.RoundedFrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,14 +70,14 @@
             android:id="@+id/tv_app_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             android:layout_margin="20dp"
             android:text=""
             android:textColor="@color/white"
             android:textSize="22sp" />
 
-    </com.holo.tvwidget.DrawingOrderRelativeLayout>
+    </org.evilbinary.tv.widget.TvZorderRelativeLayout>
 
 
 </RelativeLayout>

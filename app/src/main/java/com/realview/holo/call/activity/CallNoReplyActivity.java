@@ -13,10 +13,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
-import com.holo.tvwidget.DrawingOrderRelativeLayout;
-import com.holo.tvwidget.MetroItemFrameLayout;
-import com.holo.tvwidget.MetroViewBorderHandler;
-import com.holo.tvwidget.MetroViewBorderImpl;
 import com.hv.imlib.model.ConversationType;
 import com.realview.commonlibrary.server.manager.CommLib;
 import com.realview.commonlibrary.server.manager.UserManager;
@@ -25,6 +21,11 @@ import com.realview.holo.call.R;
 import com.realview.holo.call.basic.BaseActivity;
 import com.realview.holo.call.bean.Constants;
 import com.realview.holo.call.widget.DiscussionAvatarView;
+
+import org.evilbinary.tv.widget.BorderEffect;
+import org.evilbinary.tv.widget.BorderView;
+import org.evilbinary.tv.widget.RoundedFrameLayout;
+import org.evilbinary.tv.widget.TvZorderRelativeLayout;
 
 import java.util.List;
 
@@ -40,13 +41,13 @@ public class CallNoReplyActivity extends BaseActivity {
     @BindView(R.id.iv_video_call_reply)
     ImageView ivVideoCallReply;
     @BindView(R.id.fl_reply_call)
-    MetroItemFrameLayout flReplyCall;
+    RoundedFrameLayout flReplyCall;
     @BindView(R.id.iv_video_reply_quit)
     ImageView ivVideoReplyQuit;
     @BindView(R.id.fl_reply_quit)
-    MetroItemFrameLayout flReplyQuit;
+    RoundedFrameLayout flReplyQuit;
     @BindView(R.id.rl_video_reply_view)
-    DrawingOrderRelativeLayout rlVideoReplyView;
+    TvZorderRelativeLayout rlVideoReplyView;
 
 
     private int converstaionType = 0;
@@ -116,39 +117,44 @@ public class CallNoReplyActivity extends BaseActivity {
 
     private void initTVStatusView() {
         FrameLayout roundedFrameLayout = new FrameLayout(this);
+        roundedFrameLayout.setClipChildren(false);
 
-        final MetroViewBorderImpl metroViewBorderImpl = new MetroViewBorderImpl(roundedFrameLayout);
-        metroViewBorderImpl.setBackgroundResource(R.drawable.border_color);
+        final BorderView borderView = new BorderView(roundedFrameLayout);
+        borderView.setBackgroundResource(R.drawable.border_color);
 
-        ViewGroup list = findViewById(R.id.rl_video_reply_view);
-        metroViewBorderImpl.attachTo(list);
+        ViewGroup list = (ViewGroup) findViewById(R.id.rl_video_reply_view);
+        borderView.attachTo(list);
 
-        metroViewBorderImpl.getViewBorder().addOnFocusChanged(new MetroViewBorderHandler.FocusListener() {
+
+        borderView.getEffect().addOnFocusChanged(new BorderEffect.FocusListener() {
             @Override
             public void onFocusChanged(View oldFocus, final View newFocus) {
-                metroViewBorderImpl.getView().setTag(newFocus);
+                borderView.getView().setTag(newFocus);
+
             }
         });
-        metroViewBorderImpl.getViewBorder().addAnimatorListener(new Animator.AnimatorListener() {
+        borderView.getEffect().addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                View t = metroViewBorderImpl.getView().findViewWithTag("top");
+                View t = borderView.getView().findViewWithTag("top");
                 if (t != null) {
                     ((ViewGroup) t.getParent()).removeView(t);
-                    View of = (View) metroViewBorderImpl.getView().getTag(metroViewBorderImpl.getView().getId());
+                    View of = (View) borderView.getView().getTag(borderView.getView().getId());
                     ((ViewGroup) of).addView(t);
+
                 }
+
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                View nf = (View) metroViewBorderImpl.getView().getTag();
+                View nf = (View) borderView.getView().getTag();
                 if (nf != null) {
                     View top = nf.findViewWithTag("top");
                     if (top != null) {
                         ((ViewGroup) top.getParent()).removeView(top);
-                        ((ViewGroup) metroViewBorderImpl.getView()).addView(top);
-                        metroViewBorderImpl.getView().setTag(metroViewBorderImpl.getView().getId(), nf);
+                        ((ViewGroup) borderView.getView()).addView(top);
+                        borderView.getView().setTag(borderView.getView().getId(), nf);
 
                     }
                 }

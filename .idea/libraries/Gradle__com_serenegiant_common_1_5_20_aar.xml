@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.serenegiant:common:1.5.20@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/951ce271ef2b3e0393817db3181be7b6/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/48b586353e118f20d1b766c702dc86d3/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/951ce271ef2b3e0393817db3181be7b6/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/951ce271ef2b3e0393817db3181be7b6/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/48b586353e118f20d1b766c702dc86d3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/48b586353e118f20d1b766c702dc86d3/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

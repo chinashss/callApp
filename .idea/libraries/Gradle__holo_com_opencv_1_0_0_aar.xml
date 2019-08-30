@@ -1,10 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: holo.com:opencv:1.0.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e7ddf6365990c147642a6708c37c8a08/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e7ddf6365990c147642a6708c37c8a08/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d28dc4278ac933605efdc804f7f38535/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d28dc4278ac933605efdc804f7f38535/res" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/holo.com/opencv/1.0.0/267f517775100c9374937bf2f23e03b336b7811e/opencv-1.0.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

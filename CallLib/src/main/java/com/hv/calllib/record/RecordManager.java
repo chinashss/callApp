@@ -6,6 +6,7 @@ import com.hv.imlib.imservice.network.OkHttpUtil;
 import com.hv.imlib.protocol.ProtoConstant;
 import com.hv.imlib.protocol.ProtoUtil;
 import com.realview.commonlibrary.network.HttpClient;
+import com.realview.commonlibrary.server.manager.CommLib;
 
 
 import org.json.JSONException;
@@ -37,7 +38,7 @@ public class RecordManager {
         void onFailure(String err);
     }
 
-    public void commitCallIds(long uid, long targetId, String callId, int deviceType){
+    public void commitCallIds(long uid, long targetId, String callId, int deviceType) {
         UploadCallIdReq req = new UploadCallIdReq();
         req.setUid(uid);
         req.setSid(targetId);
@@ -45,10 +46,11 @@ public class RecordManager {
         req.setDevice(deviceType);
         Gson gson = new Gson();
         String jsonReq = gson.toJson(req);
-        String url = "http://demo.holoview-lab.com" + "/"
+
+        String url = CommLib.instance().getAppSrvUrl() + "/"
                 + ProtoConstant.HTTP_PROTO_VER + "/session/createvideorec";
         HttpClient client = new HttpClient();
-        String result = client.post(url,jsonReq);
+        String result = client.post(url, jsonReq);
         UploadCallIdRes res = gson.fromJson(result, UploadCallIdRes.class);
     }
 

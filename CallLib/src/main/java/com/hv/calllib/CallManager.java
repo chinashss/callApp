@@ -413,7 +413,7 @@ public class CallManager extends StateMachine {
         message.setMessage(e);
 //        message.setCallback(sendMessageCallback);
         message.setAction("CallInviteMessage");
-        EventBus.getDefault().post(message);
+        EventBus.getDefault().postSticky(message);
     }
 
     private void sendModifyMemberMessage(List<Long> userList, final SignalCallback callback) {
@@ -478,7 +478,7 @@ public class CallManager extends StateMachine {
         message.setMessage(e1);
 //        message.setCallback(sendMessageCallback);
         message.setAction("CallModifyMemberMessage");
-        EventBus.getDefault().post(message);
+        EventBus.getDefault().postSticky(message);
     }
 
     private void sendRingingMessage(String callId) {
@@ -488,7 +488,7 @@ public class CallManager extends StateMachine {
 
         HoloMessage holoMessage = new HoloMessage();
         holoMessage.setMessage(e);
-        EventBus.getDefault().post(holoMessage);
+        EventBus.getDefault().postSticky(holoMessage);
 
     }
 
@@ -531,7 +531,7 @@ public class CallManager extends StateMachine {
         holoMessage.setMessage(e);
 //        holoMessage.setCallback(call);
         holoMessage.setAction("CallAcceptMessage");
-        EventBus.getDefault().post(holoMessage);
+        EventBus.getDefault().postSticky(holoMessage);
 
     }
 
@@ -547,7 +547,7 @@ public class CallManager extends StateMachine {
         HoloMessage holoMessage = new HoloMessage();
         holoMessage.setMessage(e);
         holoMessage.setAction("CallHangupMessage");
-        EventBus.getDefault().post(holoMessage);
+        EventBus.getDefault().postSticky(holoMessage);
     }
 
     private String getPushData(CallMediaType mediaType, List<String> userIds, String callId) {
@@ -634,7 +634,7 @@ public class CallManager extends StateMachine {
 
         HoloMessage holoMessage = new HoloMessage();
         holoMessage.setMessage(message);
-        EventBus.getDefault().post(holoMessage);
+        EventBus.getDefault().postSticky(holoMessage);
 
     }
 

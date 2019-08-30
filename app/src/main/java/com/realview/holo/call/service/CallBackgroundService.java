@@ -22,9 +22,12 @@ import com.hv.imlib.HoloMessage;
 import com.hv.imlib.model.Message;
 import com.hv.imlib.model.message.ImageMessage;
 import com.hv.imlib.model.message.TextMessage;
+import com.realview.holo.call.CallApp;
 import com.realview.holo.call.bean.AudioOrderMessage;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.voiceengine.WebRtcAudioRecord;
@@ -53,7 +56,7 @@ public class CallBackgroundService extends Service {
 
     @Override
     public void onCreate() {
-
+        EventBus.getDefault().register(this);
     }
 
 
@@ -63,11 +66,15 @@ public class CallBackgroundService extends Service {
         return START_NOT_STICKY;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCallMessage(HoloMessage message) {
+        CallApp.getInstance().sendMessage(message);
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -75,7 +82,7 @@ public class CallBackgroundService extends Service {
         super.onTrimMemory(level);
     }
 
-    private boolean audioUnsubscribed = false;
+//    private boolean audioUnsubscribed = false;
     /**
      * 收到的消息
      */
@@ -87,15 +94,15 @@ public class CallBackgroundService extends Service {
             Log.i("lipengfei",json);
             HoloMessage holoMessage = JSON.parseObject(json, HoloMessage.class);
             String action = holoMessage.getAction();
-            if (action.equals("api.voice.order")) {
-                AudioOrderMessage message = new AudioOrderMessage();
-                message.setType(Integer.parseInt(holoMessage.getExtraMsg()));
-                EventBus.getDefault().postSticky(message);
-                return;
-            }
-            if (action.equals("api.audio.unsubscribe")){
-                audioUnsubscribed = true;
-            }
+//            if (action.equals("api.voice.order")) {
+//                AudioOrderMessage message = new AudioOrderMessage();
+//                message.setType(Integer.parseInt(holoMessage.getExtraMsg()));
+//                EventBus.getDefault().post(message);
+//                return;
+//            }
+//            if (action.equals("api.audio.unsubscribe")){
+//                audioUnsubscribed = true;
+//            }
 
             Message message = holoMessage.getMessage();
             try {
@@ -108,9 +115,9 @@ public class CallBackgroundService extends Service {
                 } else if (action.contains("CallHangupMessage")) {
                     CallHangupMessage callHangupMessage = JSON.parseObject(content.toString(), CallHangupMessage.class);
                     message.setMessageContent(callHangupMessage);
-                    HoloMessage holoMsg = new HoloMessage();
-                    holoMsg.setAction("api.audio.unsubscribe");
-                    EventBus.getDefault().postSticky(holoMsg);
+//                    HoloMessage holoMsg = new HoloMessage();
+//                    holoMsg.setAction("api.audio.unsubscribe");
+//                    CallApp.getInstance().sendMessage(holoMsg);
                 } else if (action.contains("CallInviteMessage")) {
                     CallInviteMessage callInviteMessage = JSON.parseObject(content.toString(), CallInviteMessage.class);
                     message.setMessageContent(callInviteMessage);
@@ -123,11 +130,11 @@ public class CallBackgroundService extends Service {
                 } else if (action.contains("ImageMessage")) {
                     ImageMessage imageMessage = JSON.parseObject(content.toString(), ImageMessage.class);
                     message.setMessageContent(imageMessage);
-                    EventBus.getDefault().postSticky(imageMessage);
+                    EventBus.getDefault().post(imageMessage);
                     return;
                 } else if (action.contains("TextMessage")) {
                     TextMessage textMessage = JSON.parseObject(content.toString(), TextMessage.class);
-                    EventBus.getDefault().postSticky(textMessage);
+                    EventBus.getDefault().post(textMessage);
                     return;
                 } else if (action.contains("ArMarkMessage")) {
                     CallManager.getInstance().onArMarkMessage(message);
@@ -155,17 +162,17 @@ public class CallBackgroundService extends Service {
 
         @Override
         public void onAudioData(AudioMessage audio) {
-            if (audio == null || audioUnsubscribed == true) {
-                return;
-            }
-            WebRtcAudioRecord record = WebRtcAudioRecord.getInstance();
-            if (record == null) {
-                HoloMessage message = new HoloMessage();
-                message.setAction("api.audio.unsubscribe");
-                EventBus.getDefault().post(message);
-                return;
-            }
-            record.onAudioData(audio.getAudioData());
+//            if (audio == null || audioUnsubscribed) {
+//                return;
+//            }
+//            WebRtcAudioRecord record = WebRtcAudioRecord.getInstance();
+//            if (record == null) {
+//                HoloMessage message = new HoloMessage();
+//                message.setAction("api.audio.unsubscribe");
+//                CallApp.getInstance().sendMessage(message);
+//                return;
+//            }
+//            record.onAudioData(audio.getAudioData());
         }
 
     };

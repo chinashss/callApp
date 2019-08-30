@@ -32,9 +32,9 @@ public class ActivityCollector {
     public static void finishAll() {
         for (String key : activities.keySet()) {
             closeActivity(activities.get(key).getClass());
-            activities.remove(activities.get(key).getClass().getSimpleName());
-
         }
+        activities.clear();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
     /**
      * 判断某activity是否处于栈顶

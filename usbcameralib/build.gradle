@@ -1,27 +1,6 @@
 apply plugin: 'com.android.library'
-group='com.github.jiangdongguo'
-apply plugin:'maven'
-
-uploadArchives {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            repository(url: 'http://192.168.11.252:8012/repository/maven-releases/') {
-                authentication(userName: 'admin', password: 'admin123')
-            }
-            pom.project {
-                version '1.0.1'
-                artifactId 'usbcamera-lib'
-                groupId 'holo.com'
-                packaging 'aar'
-                description 'Context'
-            }
-        }
-    }
-}
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 16
@@ -41,5 +20,5 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile('com.serenegiant:common:1.5.20')
+    api 'com.serenegiant:common:1.5.20'
 }

@@ -2,39 +2,51 @@ package com.realview.holo.call.activity;
 
 import android.animation.Animator;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.text.TextUtils;
+import android.telecom.Call;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
-import com.holo.tvwidget.MetroViewBorderHandler;
-import com.holo.tvwidget.MetroViewBorderImpl;
-import com.hv.calllib.bean.CloseMessage;
+import com.hv.calllib.CallManager;
+import com.hv.calllib.HoloCall;
+import com.hv.calllib.bean.HoloEvent;
 import com.hv.calllib.bean.MajorCommand;
-import com.hv.imlib.model.ConversationType;
+import com.hv.imlib.HoloMessage;
+import com.hv.imlib.imservice.event.CaptureImageEvent;
 import com.hv.imlib.model.message.ImageMessage;
 import com.hv.imlib.model.message.TextMessage;
-import com.realview.commonlibrary.server.manager.UserManager;
-import com.realview.commonlibrary.server.response.UserInfoGetRes;
 import com.realview.holo.call.CallApp;
 import com.realview.holo.call.HoloCallApp;
+import com.realview.holo.call.ImageUtil;
 import com.realview.holo.call.R;
 import com.realview.holo.call.basic.ActivityCollector;
 import com.realview.holo.call.basic.BaseActivity;
 import com.realview.holo.call.bean.AudioOrderMessage;
+import com.realview.holo.call.bean.CallStateMessage;
 import com.realview.holo.call.bean.Constants;
 import com.realview.holo.call.widget.BoardImageView;
-import com.realview.holo.call.widget.DiscussionAvatarView;
 
+import org.evilbinary.tv.widget.BorderEffect;
+import org.evilbinary.tv.widget.BorderView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -58,12 +70,6 @@ public class SuccessActivity extends BaseActivity {
     TextView tvVideoCallTimeCountdown;
     @BindView(R.id.iv_video_call_image_remote_show)
     BoardImageView ivVideoCallImageRemoteShow;
-    @BindView(R.id.task_name)
-    TextView tvTaskName;
-    @BindView(R.id.task_id)
-    TextView tvTaskId;
-    @BindView(R.id.daview)
-    DiscussionAvatarView daview;
     @BindView(R.id.iv_success_logo)
     ImageView ivSuccessLogo;
     @BindView(R.id.tv_video_status)
@@ -74,6 +80,8 @@ public class SuccessActivity extends BaseActivity {
     TextView tvMessageText;
     @BindView(R.id.tv_show_preview_tips)
     TextView tvShowPreviewTips;
+    @BindView(R.id.iv_show_preview_tips)
+    ImageView ivShowPreviewTips;
 
 
     @Override
@@ -81,6 +89,7 @@ public class SuccessActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         if (!(getIntent().getBooleanExtra(Constants.ACTION_CALL_SUCCESS, false))) {
             this.finish();
+            return;
         }
         setContentView(R.layout.fragment_video_call_success);
         ButterKnife.bind(this);
@@ -88,45 +97,15 @@ public class SuccessActivity extends BaseActivity {
         initTVStatusView();
         initUSBCamera();
         startCountdown();
-        tvTaskId.setText("工单号：" + CallApp.getInstance().getRoomId());
-        showAvatar();
-        content.addView(CallApp.getInstance().getSurfaceView());
+        if (CallApp.getInstance().getSurfaceView() != null) {
+            content.addView(CallApp.getInstance().getSurfaceView());
+        }
     }
 
     private void initUSBCamera() {
 
     }
 
-
-    public void showAvatar() {
-        for (int i = 0; i < CallApp.getInstance().getRoomUserIds().size(); i++) {
-            final long userId = CallApp.getInstance().getRoomUserIds().get(i);
-            if (userId <= 0)
-                continue;
-            ConversationType type = ConversationType.setValue(CallApp.getInstance().getConverstaionType());
-            UserManager.instance().getUserInfo(ConversationType.P2P == type ? userId : CallApp.getInstance().getRoomId(), new UserManager.ResultCallback<UserInfoGetRes.ResultBean>() {
-                @Override
-                public void onSuccess(final UserInfoGetRes.ResultBean resultBean) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            daview.addData(resultBean.getPortrait(), (TextUtils.isEmpty(resultBean.getNickname()) ? resultBean.getUsername() : resultBean.getNickname()));
-                        }
-                    });
-                }
-
-                @Override
-                public void onError(String errString) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            daview.addData("asd", String.valueOf(userId));
-                        }
-                    });
-                }
-            });
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -145,7 +124,27 @@ public class SuccessActivity extends BaseActivity {
      * 主动性的挂断  会关闭app
      */
     public void closeApp() {
-        EventBus.getDefault().post(new CloseMessage());
+        Toast.makeText(this, "视频连接已断开", Toast.LENGTH_SHORT).show();
+//        HoloMessage message = new HoloMessage();
+//        message.setAction("api.audio.unsubscribe");
+//        CallApp.getInstance().sendMessage(message);
+        if (CallApp.getInstance().getSession() != null) {
+            HoloCall.getInstance().hangUpCall(CallApp.getInstance().getSession().getCallId());
+        }
+        finish();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCallMessage(CallStateMessage message) {
+        switch (message) {
+            case CallDisconnected:
+                if (ActivityCollector.isActivityTop(UVCCameraActivity.class, this)) {
+                    ActivityCollector.closeActivity(UVCCameraActivity.class);
+                }
+                closeApp();
+                break;
+        }
     }
 
 
@@ -161,6 +160,34 @@ public class SuccessActivity extends BaseActivity {
         }
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSendCaptureImageEvent(HoloEvent event) {
+        if (!event.getAction().equals("api.camera.capture")) {
+            return;
+        }
+        Toast.makeText(this, event.getBody(), Toast.LENGTH_SHORT).show();
+        try {
+            String body = event.getBody();
+            CaptureImageEvent captureImageEvent = JSON.parseObject(body, CaptureImageEvent.class);
+            String imagePath = captureImageEvent.getImagepath();
+            ImageMessage imageMessage = new ImageMessage();
+            ImageUtil.ImageEntity entity = ImageUtil.getImageEntity(this, Uri.parse("file://" + imagePath));
+            imageMessage.setLocalUri(Uri.parse("file://" + entity.sourcePath));
+            imageMessage.setmLocalThumUri(Uri.parse("file://" + entity.thumbPath));
+            com.hv.imlib.model.Message e = com.hv.imlib.model.Message.obtain(Long.valueOf(CallManager.getInstance().getCallSessionImp().getTargetId()), CallManager.getInstance().getCallSessionImp().getConversationType(), imageMessage);
+            HoloMessage holoMessage = new HoloMessage();
+            holoMessage.setAction("ImageMessage");
+            holoMessage.setMessage(e);
+            CallApp.getInstance().sendMessage(holoMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onImageReceived(ImageMessage message) {
         ivVideoCallImageRemoteShow.setVisibility(View.VISIBLE);
@@ -172,13 +199,19 @@ public class SuccessActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onTextReceived(TextMessage message) {
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm");//设置日期格式
-        tvMessageText.append(df.format(new Date()));
-        tvMessageText.append(" ");
-        tvMessageText.append(message.getUserInfo().getUsername().trim());
-        tvMessageText.append("：");
-        tvMessageText.append(message.getContent().trim());
-        tvMessageText.append("\n");
+        StringBuilder sb = new StringBuilder();
+        sb.append(message.getUserInfo().getUsername().trim());
+        sb.append("  ");
+        SimpleDateFormat df = new SimpleDateFormat("MM月dd日  HH:mm:ss");//设置日期格式
+        sb.append(df.format(new Date()));
+        sb.append("\n");
+        int length = sb.length();
+        sb.append(message.getContent().trim());
+        SpannableStringBuilder style = new SpannableStringBuilder(sb.toString());
+        style.setSpan(new ForegroundColorSpan(Color.parseColor("#00BAFF")), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        style.setSpan(new RelativeSizeSpan(1.5f), length, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        style.setSpan(new ForegroundColorSpan(Color.parseColor("#FFFFFF")), length, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvMessageText.setText(style);
     }
 
     Handler imageHandler = new Handler() {
@@ -203,39 +236,44 @@ public class SuccessActivity extends BaseActivity {
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     private void initTVStatusView() {
         FrameLayout roundedFrameLayout = new FrameLayout(this);
+        roundedFrameLayout.setClipChildren(false);
 
-        final MetroViewBorderImpl metroViewBorderImpl = new MetroViewBorderImpl(roundedFrameLayout);
-        metroViewBorderImpl.setBackgroundResource(R.drawable.border_color);
+        final BorderView borderView = new BorderView(roundedFrameLayout);
+        borderView.setBackgroundResource(R.drawable.border_color);
 
-        ViewGroup list = findViewById(R.id.rl_video_call_success_view);
-        metroViewBorderImpl.attachTo(list);
+        ViewGroup list = (ViewGroup) findViewById(R.id.rl_video_call_success_view);
+        borderView.attachTo(list);
 
-        metroViewBorderImpl.getViewBorder().addOnFocusChanged(new MetroViewBorderHandler.FocusListener() {
+
+        borderView.getEffect().addOnFocusChanged(new BorderEffect.FocusListener() {
             @Override
             public void onFocusChanged(View oldFocus, final View newFocus) {
-                metroViewBorderImpl.getView().setTag(newFocus);
+                borderView.getView().setTag(newFocus);
+
             }
         });
-        metroViewBorderImpl.getViewBorder().addAnimatorListener(new Animator.AnimatorListener() {
+        borderView.getEffect().addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                View t = metroViewBorderImpl.getView().findViewWithTag("top");
+                View t = borderView.getView().findViewWithTag("top");
                 if (t != null) {
                     ((ViewGroup) t.getParent()).removeView(t);
-                    View of = (View) metroViewBorderImpl.getView().getTag(metroViewBorderImpl.getView().getId());
+                    View of = (View) borderView.getView().getTag(borderView.getView().getId());
                     ((ViewGroup) of).addView(t);
+
                 }
+
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                View nf = (View) metroViewBorderImpl.getView().getTag();
+                View nf = (View) borderView.getView().getTag();
                 if (nf != null) {
                     View top = nf.findViewWithTag("top");
                     if (top != null) {
                         ((ViewGroup) top.getParent()).removeView(top);
-                        ((ViewGroup) metroViewBorderImpl.getView()).addView(top);
-                        metroViewBorderImpl.getView().setTag(metroViewBorderImpl.getView().getId(), nf);
+                        ((ViewGroup) borderView.getView()).addView(top);
+                        borderView.getView().setTag(borderView.getView().getId(), nf);
 
                     }
                 }
@@ -262,10 +300,6 @@ public class SuccessActivity extends BaseActivity {
 
     public void stopCountDown() {
         handler.removeCallbacks(countdownRunnable);
-        timeMills = 0;
-        timeSecond = 0;
-        tvVideoCallTimeCountdown.setText("00:00");
-
     }
 
     private Handler handler = new Handler();
@@ -321,10 +355,12 @@ public class SuccessActivity extends BaseActivity {
     public void onPreview() {
         if (content.getVisibility() == View.VISIBLE) {
             content.setVisibility(View.INVISIBLE);
-            tvShowPreviewTips.setText("开启本地画面");
+            CallApp.getInstance().getSurfaceView().setVisibility(View.GONE);
+            ivShowPreviewTips.setImageResource(R.mipmap.ic_open_video_preview);
         } else {
             content.setVisibility(View.VISIBLE);
-            tvShowPreviewTips.setText("关闭本地画面");
+            CallApp.getInstance().getSurfaceView().setVisibility(View.VISIBLE);
+            ivShowPreviewTips.setImageResource(R.mipmap.ic_close_video_preview);
         }
     }
 }

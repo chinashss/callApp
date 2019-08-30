@@ -17,10 +17,17 @@ import com.tencent.bugly.beta.upgrade.UpgradeListener;
  */
 
 public class HoloCallApp extends MultiDexApplication {
+    public static HoloCallApp app;
+
+    public static HoloCallApp getApp() {
+        return app;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        app = this;
+
         Beta.upgradeDialogLayoutId = R.layout.activity_bugly_upgrade;
         Beta.tipsDialogLayoutId = R.layout.activity_bugly_upgrade;
         Beta.autoInit = true;
@@ -35,6 +42,7 @@ public class HoloCallApp extends MultiDexApplication {
     @Override
     public void onTerminate() {
         super.onTerminate();
+        CallApp.getInstance().disConn();
     }
 
 
