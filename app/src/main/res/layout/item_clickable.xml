@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.holo.tvwidget.DrawingOrderRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.evilbinary.tv.widget.TvZorderRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dor_extra_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.holo.tvwidget.MetroItemFrameLayout
+    <org.evilbinary.tv.widget.RoundedFrameLayout
         android:id="@+id/mif_take_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:src="@mipmap/ic_extra_camera_take_photo" />
-    </com.holo.tvwidget.MetroItemFrameLayout>
+    </org.evilbinary.tv.widget.RoundedFrameLayout>
 
 
     <TextView
@@ -33,7 +33,7 @@
         android:textColor="#ffffffff"
         android:textSize="22sp" />
 
-    <com.holo.tvwidget.MetroItemFrameLayout
+    <org.evilbinary.tv.widget.RoundedFrameLayout
         android:id="@+id/mif_switch_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@mipmap/ic_camera_to_glass" />
-    </com.holo.tvwidget.MetroItemFrameLayout>
+    </org.evilbinary.tv.widget.RoundedFrameLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -61,4 +61,4 @@
         android:textColor="#ffffffff"
         android:textSize="22sp" />
 
-</com.holo.tvwidget.DrawingOrderRelativeLayout>
+</org.evilbinary.tv.widget.TvZorderRelativeLayout>

@@ -40,6 +40,7 @@ public class JsonMsg {
         jsonPut(json, "id", "joinRoom");
         jsonPut(json, "name", userName);
         jsonPut(json, "room", roomNo);
+        jsonPut(json,"quality","Low");
 
         return json.toString();
     }

@@ -395,7 +395,6 @@ public class UVCCameraActivity extends BaseActivity implements CameraViewInterfa
         mCameraHelper.capturePicture(new AbstractUVCCameraHandler.OnCaptureListener() {
             @Override
             public void onCaputreResult(final byte[] data) {
-                Log.d(TAG, "TakePhoto" + data.length);
                 inSendingProgress = true;
                 try {
                     runOnUiThread(new Runnable() {
@@ -405,10 +404,8 @@ public class UVCCameraActivity extends BaseActivity implements CameraViewInterfa
                             FastYUVtoRGB fastYUVtoRGB = new FastYUVtoRGB(UVCCameraActivity.this);
                             bitmap = fastYUVtoRGB.convertYUVtoRGB(data, UVCCameraHelper.getInstance().getPreviewWidth(), UVCCameraHelper.getInstance().getPreviewHeight());
                             ivUsbCameraShow.setImageBitmap(bitmap);
-
                             imageHandler.sendEmptyMessageDelayed(0, 4000);
                             PostSendPICMessage();
-
                         }
                     });
                 } catch (Exception e) {

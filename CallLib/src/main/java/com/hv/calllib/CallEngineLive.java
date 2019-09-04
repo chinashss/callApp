@@ -171,7 +171,7 @@ public class CallEngineLive {
         mBundle.putInt(CameraManager.EXTRA_VIDEO_FPS, 20);
         mBundle.putInt(CameraManager.EXTRA_VIDEO_BITRATE, 60000);
 
-        //mBundle.putString(CameraManager.EXTRA_VIDEOCODEC, "H264");
+        mBundle.putString(CameraManager.EXTRA_VIDEOCODEC, "H264");
         //signalingParameters = null;
         scalingType = RendererCommon.ScalingType.SCALE_ASPECT_FILL;
 

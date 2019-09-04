@@ -199,7 +199,7 @@ public class VideoCallGroup implements GroupCommand.CmdEvents {
 
             // Create peer connection factory.
             if (mPeerparams != null && !PeerConnectionFactory.initializeAndroidGlobals(
-                    mContext, true, true, mPeerparams.videoCodecHwAcceleration)) {
+                    mContext, true, true, true)) {
                 //events.onPeerConnectionError("Failed to initializeAndroidGlobals");
             }
 

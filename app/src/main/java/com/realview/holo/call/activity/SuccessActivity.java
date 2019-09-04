@@ -166,7 +166,6 @@ public class SuccessActivity extends BaseActivity {
         if (!event.getAction().equals("api.camera.capture")) {
             return;
         }
-        Toast.makeText(this, event.getBody(), Toast.LENGTH_SHORT).show();
         try {
             String body = event.getBody();
             CaptureImageEvent captureImageEvent = JSON.parseObject(body, CaptureImageEvent.class);
